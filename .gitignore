@@ -22,3 +22,9 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# project reference material and local review files
+docs/design/
+docs/reference/
+contact.config.php
+review.*

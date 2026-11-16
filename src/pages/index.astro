@@ -1,16 +1,13 @@
 ---
+import Container from '../components/Container.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Lomolink Consulting" description="Personalised guidance for study, training and career direction.">
+	<section class="py-12 lg:py-20">
+		<Container>
+			<p class="text-sm font-semibold uppercase tracking-wide text-teal">Lomolink Consulting</p>
+			<h1 class="mt-4 max-w-3xl font-display text-[clamp(2.25rem,3.6vw,3.5rem)] font-semibold leading-tight text-navy">A foundation for your next step.</h1>
+		</Container>
+	</section>
+</BaseLayout>

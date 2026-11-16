@@ -1,0 +1,14 @@
+---
+import Container from '../components/Container.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found | Lomolink Consulting" description="The page you requested could not be found." noindex>
+	<section class="py-12 lg:py-20">
+		<Container class="text-center">
+			<h1 class="font-display text-4xl font-semibold text-navy">Page not found</h1>
+			<p class="mt-4 text-dark-grey">The page you are looking for does not exist.</p>
+			<a class="mt-8 inline-flex rounded-xl bg-teal px-6 py-3 font-semibold text-white" href="/">Return home</a>
+		</Container>
+	</section>
+</BaseLayout>

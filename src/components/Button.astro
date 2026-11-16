@@ -1,0 +1,38 @@
+---
+interface Props {
+	href: string;
+	variant?: 'gold' | 'teal' | 'outline';
+	size?: 'md' | 'sm';
+	class?: string;
+}
+
+const {
+	href,
+	variant = 'teal',
+	size = 'md',
+	class: className = '',
+} = Astro.props;
+const external = /^https?:\/\//.test(href);
+const variantClasses = {
+	gold: 'bg-gold text-navy hover:bg-gold/90 focus-visible:ring-white',
+	teal: 'bg-teal text-white hover:bg-teal/90 focus-visible:ring-navy',
+	outline: 'border border-white text-white hover:bg-white/10 focus-visible:ring-gold',
+};
+const sizeClasses = {
+	md: 'px-6 py-3 text-base',
+	sm: 'px-4 py-2 text-sm',
+};
+---
+
+<a
+	href={href}
+	class:list={[
+		'inline-flex items-center justify-center rounded-xl text-center font-semibold whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2',
+		variantClasses[variant],
+		sizeClasses[size],
+		className,
+	]}
+	{...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+>
+	<slot />{external && <span class="sr-only"> (opens in a new tab)</span>}
+</a>
