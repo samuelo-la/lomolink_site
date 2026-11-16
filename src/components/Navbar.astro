@@ -11,42 +11,37 @@ const links = [
 	{ href: '/recruitment/', label: 'Recruitment' },
 ];
 const enquiryUrl = site.enquiryUrl || '/contact/';
+const currentPath = Astro.url.pathname;
+const isCurrent = (href: string) => currentPath === href || (href !== '/' && currentPath.startsWith(href));
 ---
 
-<header class="sticky top-0 z-40 bg-navy transition-shadow duration-200" data-navbar>
+<header class="group sticky top-0 z-40 bg-navy transition-shadow duration-200 motion-reduce:transition-none data-[scrolled]:shadow-lg" data-navbar data-dark>
 	<nav aria-label="Main navigation">
-		<Container class="flex items-center justify-between py-4 transition-[padding] duration-200" data-navbar-inner>
+		<Container class="flex items-center justify-between py-4 transition-[padding] duration-200 motion-reduce:transition-none group-data-[scrolled]:py-3" data-navbar-inner>
 			<a href="/" class="shrink-0 font-display text-xl font-semibold tracking-wide text-white">
 				<span>{site.name}</span>
 				<span class="mt-1 block h-0.5 w-12 bg-gold" aria-hidden="true"></span>
 			</a>
-			<button
-				type="button"
-				class="rounded-md p-2 text-white lg:hidden"
-				aria-expanded="false"
-				aria-controls="mobile-menu"
-				aria-label="Toggle navigation menu"
-				data-menu-toggle
-			>
-				<span class="sr-only">Menu</span>
-				<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" />
-				</svg>
-			</button>
-			<div class="hidden items-center gap-8 lg:flex">
+			<details class="xl:hidden" data-mobile-menu>
+				<summary class="flex cursor-pointer list-none rounded-md p-2 text-white marker:hidden" aria-label="Open navigation menu" data-menu-summary>
+					<span class="sr-only">Menu</span>
+					<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+						<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" />
+					</svg>
+				</summary>
+				<nav aria-label="Mobile navigation" class="absolute inset-x-0 top-full border-t border-white/10 bg-navy">
+					<Container class="flex flex-col gap-4 py-4 text-sm font-medium text-white">
+						{links.map((link) => <a href={link.href} class="transition-colors hover:text-gold" data-menu-link aria-current={isCurrent(link.href) ? 'page' : undefined}>{link.label}</a>)}
+						<Button href={enquiryUrl} variant="gold" size="sm" class="w-fit" data-menu-link>Get in touch</Button>
+					</Container>
+				</nav>
+			</details>
+			<div class="hidden items-center gap-8 xl:flex">
 				<div class="flex items-center gap-6 text-sm font-medium text-white">
-					{links.map((link) => <a href={link.href}>{link.label}</a>)}
+					{links.map((link) => <a href={link.href} class="transition-colors hover:text-gold" aria-current={isCurrent(link.href) ? 'page' : undefined}>{link.label}</a>)}
 				</div>
 				<Button href={enquiryUrl} variant="gold" size="sm">Get in touch</Button>
 			</div>
 		</Container>
 	</nav>
-	<div id="mobile-menu" class="hidden border-t border-white/10 lg:hidden" data-mobile-menu>
-		<nav aria-label="Mobile navigation">
-			<Container class="flex flex-col gap-4 py-4 text-sm font-medium text-white">
-				{links.map((link) => <a href={link.href} data-menu-link>{link.label}</a>)}
-				<Button href={enquiryUrl} variant="gold" size="sm" class="w-fit" data-menu-link>Get in touch</Button>
-			</Container>
-		</nav>
-	</div>
 </header>

@@ -9,29 +9,51 @@ async function visit(directory) {
 	for (const entry of await readdir(directory, { withFileTypes: true })) {
 		const path = join(directory, entry.name);
 		if (entry.isDirectory()) await visit(path);
-		else if (entry.name.endsWith('.html')) {
-			const html = await readFile(path, 'utf8');
-			const checks = [
-				[/<script(?![^>]*\bsrc=)[^>]*>/i, 'inline script'],
-				[/<style\b/i, 'style tag'],
-				[/\bstyle\s*=/i, 'style attribute'],
-				[/\bon[a-z]+\s*=/i, 'event attribute'],
-				[/\bjavascript:/i, 'javascript URL'],
-				[/<script\b[^>]*\bsrc\s*=\s*["']https?:\/\//i, 'external script URL'],
-				[/<link\b[^>]*\brel\s*=\s*["']stylesheet["'][^>]*\bhref\s*=\s*["']https?:\/\//i, 'external stylesheet URL'],
-				[/<(?:img|source|video|audio|iframe)\b[^>]*\bsrc\s*=\s*["']https?:\/\//i, 'external media URL'],
-				[/<form\b[^>]*\baction\s*=\s*["']https?:\/\//i, 'external form action'],
-			];
-			for (const [pattern, label] of checks) {
-				if (pattern.test(html)) violations.push(`${path}: ${label}`);
-			}
+		else if (entry.name.endsWith('.html')) await checkHtml(path);
+		else if (entry.name.endsWith('.css')) await checkCss(path);
+	}
+}
+
+async function checkHtml(path) {
+	const html = await readFile(path, 'utf8');
+	const tags = html.match(/<([a-z][\w:-]*)(?:\s[^<>]*?)?\s*\/?>/gi) ?? [];
+
+	for (const tag of tags) {
+		const name = tag.match(/^<([a-z][\w:-]*)/i)?.[1].toLowerCase();
+		const attributes = tag.slice(name.length + 1);
+		if (name === 'script' && !/\bsrc\s*=/i.test(attributes)) violations.push(`${path}: inline script`);
+		if (/<style\b/i.test(tag)) violations.push(`${path}: style tag`);
+		if (/\bstyle\s*=/i.test(attributes)) violations.push(`${path}: style attribute`);
+		if (/\bon[a-z]+\s*=/i.test(attributes)) violations.push(`${path}: inline event handler`);
+
+		const allowedExternalHref =
+			name === 'a' ||
+			(name === 'link' && /\brel\s*=\s*["'][^"']*\b(?:canonical|alternate)\b/i.test(attributes)) ||
+			(name === 'meta' && /\b(?:property|name)\s*=\s*["']og:/i.test(attributes));
+		const externalAttributes = attributes.match(/\b(?:src|href|action|poster)\s*=\s*["'](https?:\/\/|\/\/)/gi) ?? [];
+		if (externalAttributes.length && !allowedExternalHref) {
+			violations.push(`${path}: external resource URL in <${name}>`);
 		}
+	}
+}
+
+async function checkCss(path) {
+	const css = await readFile(path, 'utf8');
+	if (/url\(\s*["']?(?:https?:)?\/\//i.test(css)) violations.push(`${path}: external CSS URL`);
+	if (/@import\s+(?:url\(\s*)?["']?(?:https?:)?\/\//i.test(css)) violations.push(`${path}: external CSS import`);
+}
+
+for (const required of ['.htaccess', '404.html']) {
+	try {
+		await readFile(join(dist, required));
+	} catch {
+		violations.push(`dist/${required}: required file is missing`);
 	}
 }
 
 await visit(dist);
 if (violations.length) {
-	console.error(violations.join('\n'));
+	console.error(['dist check failed:', ...violations].join('\n'));
 	process.exit(1);
 }
 console.log('dist check passed');

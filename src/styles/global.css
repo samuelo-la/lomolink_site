@@ -19,7 +19,7 @@
 
 @layer base {
 	html {
-		scroll-behavior: smooth;
+		scroll-padding-top: 5rem;
 	}
 
 	body {
@@ -29,16 +29,28 @@
 	}
 
 	:focus-visible {
-		outline: 2px solid var(--color-gold);
+		outline: 2px solid var(--color-teal);
 		outline-offset: 3px;
 	}
 
-	[data-navbar][data-scrolled] {
-		box-shadow: 0 4px 12px rgb(15 45 74 / 12%);
+	[data-dark] :focus-visible {
+		outline-color: var(--color-gold);
 	}
+}
 
-	[data-navbar][data-scrolled] [data-navbar-inner] {
-		padding-top: 0.75rem;
-		padding-bottom: 0.75rem;
+@media (prefers-reduced-motion: no-preference) {
+	html {
+		scroll-behavior: smooth;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	::before,
+	::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
 	}
 }
