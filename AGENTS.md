@@ -1,5 +1,7 @@
 ## Development
 
+Before making any change in this project, read and follow .github/copilot-instructions.md. If anything in docs/reference contradicts it, that file wins; docs/reference is old Laravel material kept for reference only.
+
 When starting the dev server, use background mode:
 
 ```
