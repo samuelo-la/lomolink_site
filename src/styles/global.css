@@ -15,6 +15,41 @@
 	--color-dark-grey: #334155;
 	--font-display: 'Playfair Display', Georgia, serif;
 	--font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+	--shadow-card: 0 1px 2px rgb(15 45 74 / 0.06), 0 4px 12px rgb(15 45 74 / 0.06);
+	--shadow-card-hover: 0 4px 8px rgb(15 45 74 / 0.08), 0 14px 28px rgb(15 45 74 / 0.12);
+
+	--animate-fade-up: fade-up 600ms ease-out both;
+	--animate-slide-in: slide-in 600ms ease-out 100ms both;
+
+	@keyframes fade-up {
+		from {
+			opacity: 0;
+			transform: translateY(16px);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	@keyframes slide-in {
+		from {
+			opacity: 0;
+			transform: translateX(32px);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+}
+
+/* Places the hero image so its bottom-left corner sits exactly where the text column (47% of the container) ends. */
+/* min() sits in a variable because nesting it inside calc() crashes the CSS minifier. */
+@utility hero-media {
+	--hero-container: min(100%, 1200px);
+	left: calc((100% - var(--hero-container)) / 2 + 2rem + (var(--hero-container) - 4rem) * 0.47);
 }
 
 @layer base {
@@ -38,6 +73,40 @@
 	}
 }
 
+/* Scroll reveal: main.js adds .reveal-pending only to elements below the fold, so without JavaScript everything is visible. */
+[data-reveal] {
+	transition:
+		opacity 500ms ease-out,
+		transform 500ms ease-out;
+}
+
+[data-reveal='line'] {
+	transform-origin: left center;
+	transition: transform 600ms ease-out;
+}
+
+[data-reveal-delay='1'] {
+	transition-delay: 100ms;
+}
+
+[data-reveal-delay='2'] {
+	transition-delay: 200ms;
+}
+
+[data-reveal-delay='3'] {
+	transition-delay: 300ms;
+}
+
+.reveal-pending {
+	opacity: 0;
+	transform: translateY(16px);
+}
+
+.reveal-pending[data-reveal='line'] {
+	opacity: 1;
+	transform: scaleX(0);
+}
+
 @media (prefers-reduced-motion: no-preference) {
 	html {
 		scroll-behavior: smooth;
@@ -48,9 +117,14 @@
 	*,
 	::before,
 	::after {
-		animation-duration: 0.01ms !important;
-		animation-iteration-count: 1 !important;
-		transition-duration: 0.01ms !important;
+		animation: none !important;
+		transition: none !important;
 		scroll-behavior: auto !important;
+	}
+
+	.reveal-pending,
+	.reveal-pending[data-reveal='line'] {
+		opacity: 1;
+		transform: none;
 	}
 }

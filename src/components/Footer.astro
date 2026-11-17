@@ -1,14 +1,46 @@
 ---
+import { mainNav, routes } from '../data/routes';
 import { site } from '../data/site';
 import Container from './Container.astro';
+import Icon from './icons/Icon.astro';
+import Wordmark from './Wordmark.astro';
+
+const linkClasses = 'transition-colors hover:text-gold';
 ---
 
 <footer class="bg-navy text-white" data-dark>
-	<Container class="flex flex-col gap-4 py-8 text-sm lg:flex-row lg:items-center lg:justify-between">
-		<div>
-			<p class="font-semibold">{site.name}</p>
-			<p class="mt-1 text-white/80">{site.email}</p>
+	<Container class="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1.3fr] lg:py-16">
+		<div class="sm:col-span-2 lg:col-span-1">
+			<Wordmark />
+			<p class="mt-4 max-w-xs text-sm leading-relaxed text-white/80">Education guidance, training support and healthcare recruitment.</p>
 		</div>
-		<p class="text-white/80">&copy; {new Date().getFullYear()} {site.name}. All rights reserved.</p>
+
+		<nav aria-labelledby="footer-links">
+			<h2 id="footer-links" class="text-sm font-semibold tracking-wider text-gold uppercase">Quick links</h2>
+			<ul class="mt-4 space-y-2 text-sm text-white/90">
+				{mainNav.map((link) => <li><a href={link.href} class={linkClasses}>{link.label}</a></li>)}
+				<li><a href={routes.contact} class={linkClasses}>Contact Us</a></li>
+			</ul>
+		</nav>
+
+		<div>
+			<h2 class="text-sm font-semibold tracking-wider text-gold uppercase">Contact</h2>
+			<ul class="mt-4 space-y-3 text-sm text-white/90">
+				<li class="flex items-center gap-3"><Icon name="user" class="size-5 shrink-0 text-gold" />{site.contactPerson}</li>
+				<li class="flex items-center gap-3"><Icon name="mail" class="size-5 shrink-0 text-gold" /><a href={`mailto:${site.email}`} class:list={[linkClasses, 'break-all']}>{site.email}</a></li>
+				<li class="flex items-center gap-3"><Icon name="phone" class="size-5 shrink-0 text-gold" /><a href={site.phoneHref} class={linkClasses}>{site.phone}</a></li>
+				<li class="flex items-center gap-3"><Icon name="globe" class="size-5 shrink-0 text-gold" /><a href={site.url} class={linkClasses}>{site.website}</a></li>
+			</ul>
+		</div>
 	</Container>
+
+	<div class="border-t border-white/10">
+		<Container class="flex flex-col gap-3 py-6 text-sm text-white/80 sm:flex-row sm:items-center sm:justify-between">
+			<p>&copy; {new Date().getFullYear()} {site.name}. All rights reserved.</p>
+			<ul class="flex gap-6">
+				<li><a href={routes.privacy} class={linkClasses}>Privacy notice</a></li>
+				<li><a href={routes.contact} class={linkClasses}>Contact Us</a></li>
+			</ul>
+		</Container>
+	</div>
 </footer>

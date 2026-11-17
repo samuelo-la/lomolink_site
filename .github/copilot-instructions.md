@@ -102,13 +102,13 @@ Navy background. Wordmark on the left. Links: Home, About Us, Education & Traini
 2. **How we can help.** Three cards: Education guidance, Training and qualifications (award rosette icon), Healthcare recruitment. Icon on the left of the text, title, short text, "Learn more" link with an arrow.
 3. **Explore education and training.** Six tiles on teal-pale: Adult Social Care & Healthcare, English & Mathematics, Digital Skills, Business & Management, Early Childhood Education, Education & Training. Three columns on desktop, two on tablet, one on mobile. Teal "View study options" button. Tiles come from `courses.json`.
 4. **Support for learners with refugee status.** Cream background, photo on the left, heading, paragraph and teal button on the right. Stacks on mobile.
-5. **A clear path forward.** Four numbered steps with gold circles and a connector line on desktop: Tell us your goals, Explore your options, Plan your next steps, Apply with support. Steps stack on mobile.
+5. **A clear path forward.** Four numbered steps with gold circles and a connector line on desktop (inner pages use teal circles, as their mockups show): Tell us your goals, Explore your options, Plan your next steps, Apply with support. Steps stack on mobile.
 6. **Partnership banner.** Navy strip, headline, one line of text, gold "Discuss a partnership" button.
 7. **Contact section.** "Let's discuss your next step" with contact person, email, phone and website, plus a note that course availability, entry requirements and fees vary by programme. Email is a `mailto:` link and phone is a `tel:` link.
 8. **Footer.** Quick links, contact details, privacy notice link, copyright line.
 
 ### Other pages
-About Us, Education & Training (study areas with a category filter that works through `main.js` and shows everything without it), Study area detail (`/study-options/[slug]`, information only, generated with `getStaticPaths`), Refugee Support, Recruitment, Contact, Thank you (`noindex`), Privacy Notice, 404.
+About Us, Education & Training (the six study areas as cards, no category filter: owner decision, matching the mockup), Study area detail (`/study-options/[slug]`, information only, generated with `getStaticPaths`), Refugee Support, Recruitment, Contact, Thank you (`noindex`), Privacy Notice, 404.
 
 ## Components
 
@@ -134,7 +134,7 @@ Front end on `/contact/`:
 - Fields: name, email, message. Visible labels, inline errors linked with `aria-describedby`, a visible focus state, and a line under the button: "We use your details only to reply to your enquiry." with a link to the Privacy Notice.
 - The form is a normal HTML form that posts to `/contact.php`. It works without JavaScript.
 - `main.js` upgrades it: it sends the form with `fetch` (header `Accept: application/json`), shows the result in an `aria-live` region, and does not reload the page.
-- Buttons elsewhere can link to `/contact/?topic=consultation` or `?topic=partnership`. Allow only those two values and use them to prefill the start of the message box with a short sentence. Ignore any other value.
+- Buttons elsewhere can link to `/contact/?topic=<value>`. Allowed values (owner-approved): `consultation`, `partnership`, `referral`, `candidate`, `employer`. Use them only to prefill the start of the message box with a fixed short sentence. Ignore any other value. Topics never add form fields.
 
 Back end in `public/contact.php` (PHP 8.1+, `declare(strict_types=1)`):
 - Accept POST only, otherwise return 405.
@@ -149,8 +149,9 @@ Back end in `public/contact.php` (PHP 8.1+, `declare(strict_types=1)`):
 
 ## Company details and course data
 
-- Company details live in `src/data/site.ts`: name (Lomolink Consulting), contact person, email, phone, website, `enquiryUrl`. Use placeholders for everything except the name until the owner supplies real values. Never hardcode these in components.
-- `src/data/courses.json` is an array of study areas. Each has `slug`, `title`, `category`, `icon`, `summary`, `description`. Every course page carries a note that availability, entry requirements and fees vary by programme and should be confirmed through an enquiry. Do not list prices, start dates, accreditation or awarding bodies unless supplied.
+- Company details live in `src/data/site.ts`: name (Lomolink Consulting), contact person, email, phone, website, `enquiryUrl`. The owner supplied real values on 17 November 2026. Never hardcode these in components.
+- The domain is `lomolinkconsulting.com` (set as `site` in `astro.config.mjs`).
+- `src/data/courses.json` is an array of study areas. Each has `slug`, `title`, `category`, `icon`, `summary`, `description` and `qualifications` (example qualification names taken from the owner's Education & Training mockup, approved by the owner). Every course page carries a note that availability, entry requirements and fees vary by programme and should be confirmed through an enquiry. Do not list prices, start dates, accreditation or awarding bodies unless supplied.
 
 ## Content and imagery
 
@@ -237,9 +238,9 @@ Every item is required.
 
 The old Laravel project is reference only. Tick each step when it is done and tested.
 
-- [ ] 1. Project setup: Astro, Tailwind, fonts, tokens, `BaseLayout`, `Container`, `Button`, `SectionHeading`, `Navbar`, `Footer`, `main.js`, `site.ts`, `.htaccess`, `check-dist.mjs`, `.gitignore`, `.npmrc`, 404 page
-- [ ] 2. Homepage sections as components, fully responsive
-- [ ] 3. Scroll animations and hover states with reduced-motion support
+- [ ] 1. Project setup: Astro, Tailwind, fonts, tokens, `BaseLayout`, `Container`, `Button`, `SectionHeading`, `Navbar`, `Footer`, `main.js`, `site.ts`, `.htaccess`, `check-dist.mjs`, `.gitignore`, `.npmrc`, 404 page. Done except: `.htaccess` long cache must be limited to `/_astro/` (currently all css/js/woff2, and inside `mod_expires`); README is still the Astro starter. Decide www vs non-www and redirect the other.
+- [x] 2. Homepage sections as components, fully responsive (checked at 390, 768, 1024, 1440, 1920). Photos are placeholders until supplied.
+- [ ] 3. Scroll animations and hover states with reduced-motion support. Done for homepage components (reveal, stagger, steps line, hero keyframes, card lift); apply to other pages as they are built.
 - [ ] 4. `courses.json`, study options page with category filter, study area detail pages
 - [ ] 5. Contact page, `contact.php`, example config, thank-you page, form upgrade in `main.js`
 - [ ] 6. Remaining pages: About, Refugee Support, Recruitment, Privacy Notice

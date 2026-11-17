@@ -1,0 +1,56 @@
+[
+	{
+		"slug": "adult-social-care-healthcare",
+		"title": "Adult Social Care & Healthcare",
+		"category": "Health and care",
+		"icon": "heart-plus",
+		"summary": "Build knowledge for care work or prepare for further healthcare study.",
+		"description": "Explore qualifications that introduce the knowledge and values used in adult social care, or prepare you for further study in healthcare. We help you understand what each route involves and whether it suits your experience and goals.",
+		"qualifications": ["Level 2 Adult Social Care Certificate", "Access to HE Diploma in Nursing and Midwifery"]
+	},
+	{
+		"slug": "english-mathematics",
+		"title": "English & Mathematics",
+		"category": "Essential skills",
+		"icon": "book-open",
+		"summary": "Develop essential skills for work, study and everyday life.",
+		"description": "English and mathematics qualifications are often needed for further study and many jobs. We help you find a suitable level and understand how these qualifications fit with your wider plans.",
+		"qualifications": ["Functional Skills English: Levels 1 and 2", "Functional Skills Mathematics: Levels 1 and 2"]
+	},
+	{
+		"slug": "digital-skills",
+		"title": "Digital Skills",
+		"category": "Essential skills",
+		"icon": "laptop",
+		"summary": "Build confidence using technology for learning, employment and daily tasks.",
+		"description": "Digital skills support learning, job searching and everyday tasks. We help you explore courses that build practical confidence with technology at a pace that suits you.",
+		"qualifications": ["Level 1 Certificate in Digital Skills"]
+	},
+	{
+		"slug": "business-management",
+		"title": "Business & Management",
+		"category": "Professional development",
+		"icon": "chart-growth",
+		"summary": "Develop your understanding of business operations and leadership.",
+		"description": "Business and management qualifications can support progression into supervisory and leadership roles. We help you compare levels and understand the entry requirements for each.",
+		"qualifications": ["Business Management Diplomas: Levels 4, 5 and 6"]
+	},
+	{
+		"slug": "early-childhood-education",
+		"title": "Early Childhood Education",
+		"category": "Education and care",
+		"icon": "users",
+		"summary": "Explore children's development, learning and early years practice.",
+		"description": "Early childhood education qualifications focus on how young children learn and develop. We help you understand the options and what each level may lead to.",
+		"qualifications": ["Early Childhood Education Diplomas: Levels 4 and 5"]
+	},
+	{
+		"slug": "education-training",
+		"title": "Education & Training",
+		"category": "Education and care",
+		"icon": "books",
+		"summary": "Understand teaching responsibilities, inclusive learning and assessment.",
+		"description": "If you are interested in teaching or training others, an introductory teaching qualification is a common first step. We help you understand what is involved and how to prepare.",
+		"qualifications": ["Level 3 Award in Education and Training"]
+	}
+]

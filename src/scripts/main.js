@@ -19,3 +19,25 @@ menu?.querySelectorAll('[data-menu-link]').forEach((link) => link.addEventListen
 document.addEventListener('keydown', (event) => {
 	if (event.key === 'Escape') closeMenu();
 });
+
+// Scroll reveal: only elements that start below the fold are hidden, and only when motion is allowed.
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if ('IntersectionObserver' in window && !reduceMotion) {
+	const observer = new IntersectionObserver(
+		(entries) => {
+			entries.forEach((entry) => {
+				if (!entry.isIntersecting) return;
+				entry.target.classList.remove('reveal-pending');
+				observer.unobserve(entry.target);
+			});
+		},
+		{ rootMargin: '0px 0px -8% 0px' },
+	);
+
+	document.querySelectorAll('[data-reveal]').forEach((element) => {
+		if (element.getBoundingClientRect().top < window.innerHeight) return;
+		element.classList.add('reveal-pending');
+		observer.observe(element);
+	});
+}

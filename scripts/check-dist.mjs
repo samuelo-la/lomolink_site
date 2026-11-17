@@ -25,6 +25,7 @@ async function checkHtml(path) {
 		if (/<style\b/i.test(tag)) violations.push(`${path}: style tag`);
 		if (/\bstyle\s*=/i.test(attributes)) violations.push(`${path}: style attribute`);
 		if (/\bon[a-z]+\s*=/i.test(attributes)) violations.push(`${path}: inline event handler`);
+		if (/=\s*["']?\s*javascript:/i.test(attributes)) violations.push(`${path}: javascript: URL`);
 
 		const allowedExternalHref =
 			name === 'a' ||

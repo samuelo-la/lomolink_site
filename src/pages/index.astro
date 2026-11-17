@@ -1,13 +1,88 @@
 ---
+import Button from '../components/Button.astro';
+import ContactSection from '../components/ContactSection.astro';
 import Container from '../components/Container.astro';
+import CourseTile from '../components/CourseTile.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import Hero from '../components/Hero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import SplitFeature from '../components/SplitFeature.astro';
+import Steps from '../components/Steps.astro';
+import type { IconName } from '../components/icons/paths';
+import { courses } from '../data/courses';
+import { enquiryHref, routes } from '../data/routes';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const services: { icon: IconName; title: string; text: string; href: string }[] = [
+	{ icon: 'graduation-cap', title: 'Education guidance', text: 'Explore suitable study options and get support with your application.', href: routes.educationTraining },
+	{ icon: 'award', title: 'Training and qualifications', text: 'Explore courses to develop your skills and support your career goals.', href: routes.educationTraining },
+	{ icon: 'heart-pulse', title: 'Healthcare recruitment', text: 'Support for candidates and employers seeking the right match.', href: routes.recruitment },
+];
+
+const steps = ['Tell us your goals', 'Explore your options', 'Plan your next steps', 'Apply with support'];
 ---
 
-<BaseLayout title="Lomolink Consulting" description="Personalised guidance for study, training and career direction.">
-	<section class="py-12 lg:py-20">
+<BaseLayout
+	title="Lomolink Consulting | Education, training and recruitment guidance"
+	description="Personalised guidance to help you explore study options, develop professional skills and find your career direction, including support for learners with refugee status."
+>
+	<Hero
+		eyebrow="Education · Training · Recruitment"
+		titleLines={['Take the next step', 'towards your future.']}
+		text="Personalised guidance to help you explore study options, develop professional skills and find your career direction."
+		primary={{ label: 'Explore courses', href: routes.educationTraining }}
+		secondary={{ label: 'Book a consultation', href: enquiryHref('consultation') }}
+	/>
+
+	<section class="py-12 lg:py-20" aria-labelledby="help-heading">
 		<Container>
-			<p class="text-sm font-semibold uppercase tracking-wide text-teal">Lomolink Consulting</p>
-			<h1 class="mt-4 max-w-3xl font-display text-[clamp(2.25rem,3.6vw,3.5rem)] font-semibold leading-tight text-navy">A foundation for your next step.</h1>
+			<SectionHeading id="help-heading">How we can help</SectionHeading>
+			<div class="mx-auto mt-10 grid max-w-2xl gap-6 lg:max-w-none lg:grid-cols-3">
+				{services.map((service, i) => (
+					<div data-reveal data-reveal-delay={String(i)}>
+						<ServiceCard {...service} />
+					</div>
+				))}
+			</div>
 		</Container>
 	</section>
+
+	<section class="pb-12 lg:pb-20" aria-labelledby="courses-heading">
+		<Container>
+			<SectionHeading id="courses-heading">Explore education and training</SectionHeading>
+			<ul class="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+				{courses.map((course, i) => (
+					<li data-reveal data-reveal-delay={String(i % 3)}>
+						<CourseTile icon={course.icon} title={course.title} href={routes.studyOption(course.slug)} />
+					</li>
+				))}
+			</ul>
+			<div class="mt-10 text-center">
+				<Button href={routes.educationTraining} variant="teal">View study options</Button>
+			</div>
+		</Container>
+	</section>
+
+	<SplitFeature id="refugee-heading" title="Support for learners with refugee status" action={{ label: 'Explore refugee education support', href: routes.refugeeSupport }}>
+		<p>Build on your experience. Explore routes back into education, develop new skills and plan your next steps with respectful, personalised guidance.</p>
+	</SplitFeature>
+
+	<section class="py-12 lg:py-20" aria-labelledby="path-heading">
+		<Container>
+			<SectionHeading id="path-heading">A clear path forward</SectionHeading>
+			<div class="mt-10">
+				<Steps steps={steps} tone="gold" label="How it works" />
+			</div>
+		</Container>
+	</section>
+
+	<CtaBanner
+		id="partnership-heading"
+		title="Supporting opportunity together"
+		text="We welcome enquiries from charities, community organisations, education providers and employers."
+		action={{ label: 'Discuss a partnership', href: enquiryHref('partnership') }}
+	/>
+
+	<ContactSection title="Let’s discuss your next step" note="Course availability, entry requirements and fees vary by programme." />
 </BaseLayout>
