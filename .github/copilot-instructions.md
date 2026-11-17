@@ -238,8 +238,8 @@ Every item is required.
 
 The old Laravel project is reference only. Tick each step when it is done and tested.
 
-- [ ] 1. Project setup: Astro, Tailwind, fonts, tokens, `BaseLayout`, `Container`, `Button`, `SectionHeading`, `Navbar`, `Footer`, `main.js`, `site.ts`, `.htaccess`, `check-dist.mjs`, `.gitignore`, `.npmrc`, 404 page. Done except: `.htaccess` long cache must be limited to `/_astro/` (currently all css/js/woff2, and inside `mod_expires`); README is still the Astro starter. Decide www vs non-www and redirect the other.
-- [x] 2. Homepage sections as components, fully responsive (checked at 390, 768, 1024, 1440, 1920). Photos are placeholders until supplied.
+- [ ] 1. Project setup: Astro, Tailwind, fonts, tokens, `BaseLayout`, `Container`, `Button`, `SectionHeading`, `Navbar`, `Footer`, `main.js`, `site.ts`, `.htaccess`, `check-dist.mjs`, `.gitignore`, `.npmrc`, 404 page. Done except: `.htaccess` long cache must be limited to `/_astro/` (currently all css/js/woff2, and inside `mod_expires`); README is still the Astro starter. Canonical host is `https://lomolinkconsulting.com` (no www); `.htaccess` redirects HTTP and www there.
+- [x] 2. Homepage sections as components, fully responsive (checked at 390, 768, 1024, 1440, 1920). Owner-supplied photos in `src/assets/images/` (hero and refugee section).
 - [ ] 3. Scroll animations and hover states with reduced-motion support. Done for homepage components (reveal, stagger, steps line, hero keyframes, card lift); apply to other pages as they are built.
 - [ ] 4. `courses.json`, study options page with category filter, study area detail pages
 - [ ] 5. Contact page, `contact.php`, example config, thank-you page, form upgrade in `main.js`

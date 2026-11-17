@@ -5,6 +5,6 @@ export const site = {
 	email: 'lomolinkconsulting@gmail.com',
 	phone: '07568 317105',
 	phoneHref: 'tel:+447568317105',
-	website: 'www.lomolinkconsulting.com',
+	website: 'lomolinkconsulting.com',
 	enquiryUrl: '/contact/',
 } as const;

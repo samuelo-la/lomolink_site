@@ -19,9 +19,11 @@ interface Props {
 	secondary?: Action;
 	image?: ImageMetadata;
 	imageAlt?: string;
+	/** Literal Tailwind object-position class, e.g. "object-[65%_50%]", to keep the subject in frame. */
+	imagePosition?: string;
 }
 
-const { eyebrow, titleLines, text, primary, secondary, image, imageAlt = '' } = Astro.props;
+const { eyebrow, titleLines, text, primary, secondary, image, imageAlt = '', imagePosition = 'object-center' } = Astro.props;
 ---
 
 <section class="relative overflow-hidden bg-navy text-white" data-dark>
@@ -43,7 +45,7 @@ const { eyebrow, titleLines, text, primary, secondary, image, imageAlt = '' } = 
 
 	<div class="relative aspect-[16/10] sm:aspect-[2/1] lg:absolute lg:inset-y-0 lg:right-0 lg:aspect-auto lg:hero-media lg:[clip-path:polygon(4rem_0,100%_0,100%_100%,0_100%)] motion-safe:lg:animate-slide-in">
 		{image ? (
-			<Image src={image} alt={imageAlt} class="size-full object-cover" loading="eager" fetchpriority="high" widths={[640, 960, 1280, 1600]} sizes="(min-width: 1024px) 55vw, 100vw" />
+			<Image src={image} alt={imageAlt} class:list={['size-full object-cover', imagePosition]} loading="eager" fetchpriority="high" widths={[640, 960, 1280, 1600]} sizes="(min-width: 1024px) 55vw, 100vw" />
 		) : (
 			<ImagePlaceholder class="size-full" />
 		)}

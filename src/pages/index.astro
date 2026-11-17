@@ -10,6 +10,8 @@ import ServiceCard from '../components/ServiceCard.astro';
 import SplitFeature from '../components/SplitFeature.astro';
 import Steps from '../components/Steps.astro';
 import type { IconName } from '../components/icons/paths';
+import heroImage from '../assets/images/image_for_banner.jpeg';
+import refugeeImage from '../assets/images/supports_for_learners.jpeg';
 import { courses } from '../data/courses';
 import { enquiryHref, routes } from '../data/routes';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -33,6 +35,9 @@ const steps = ['Tell us your goals', 'Explore your options', 'Plan your next ste
 		text="Personalised guidance to help you explore study options, develop professional skills and find your career direction."
 		primary={{ label: 'Explore courses', href: routes.educationTraining }}
 		secondary={{ label: 'Book a consultation', href: enquiryHref('consultation') }}
+		image={heroImage}
+		imageAlt="A group of adults talking together around a library table with books and a laptop."
+		imagePosition="object-[65%_50%]"
 	/>
 
 	<section class="py-12 lg:py-20" aria-labelledby="help-heading">
@@ -64,7 +69,13 @@ const steps = ['Tell us your goals', 'Explore your options', 'Plan your next ste
 		</Container>
 	</section>
 
-	<SplitFeature id="refugee-heading" title="Support for learners with refugee status" action={{ label: 'Explore refugee education support', href: routes.refugeeSupport }}>
+	<SplitFeature
+		id="refugee-heading"
+		title="Support for learners with refugee status"
+		action={{ label: 'Explore refugee education support', href: routes.refugeeSupport }}
+		image={refugeeImage}
+		imageAlt="An adviser points to a document while a man holding a pen reviews it with her at a library table."
+	>
 		<p>Build on your experience. Explore routes back into education, develop new skills and plan your next steps with respectful, personalised guidance.</p>
 	</SplitFeature>
 
