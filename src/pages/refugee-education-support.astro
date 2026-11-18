@@ -1,0 +1,78 @@
+---
+import ContactSection from '../components/ContactSection.astro';
+import Container from '../components/Container.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import Hero from '../components/Hero.astro';
+import IconCard from '../components/IconCard.astro';
+import IntroSplit from '../components/IntroSplit.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import type { IconName } from '../components/icons/paths';
+import { enquiryHref } from '../data/routes';
+import { site } from '../data/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import heroImage from '../assets/images/Refugee Education Support page.png';
+
+// Headings from the first copy brief, text from the updated brief (sixth card from the first brief).
+const services: { icon: IconName; title: string; text: string }[] = [
+	{ icon: 'graduation-cap', title: 'Finding a suitable study pathway', text: 'Find a course that fits your interests, experience and career goals.' },
+	{ icon: 'book-open', title: 'Returning to education', text: 'Understand entry requirements and identify routes back into education.' },
+	{ icon: 'certificate', title: 'Understanding overseas qualifications', text: 'Build on overseas qualifications by finding out where to have them assessed and what documents you may need.' },
+	{ icon: 'pen-document', title: 'Preparing your application', text: 'Prepare your application with guidance on personal statements, supporting documents and deadlines.' },
+	{ icon: 'coins', title: 'Exploring funding options', text: 'Explore funding options and find out where to check eligibility for student finance, scholarships or other support.' },
+	{ icon: 'target', title: 'Connecting education with career goals', text: 'We help you consider how your chosen course or training could support your employment ambitions and longer-term development.' },
+];
+---
+
+<BaseLayout
+	title={`Refugee Education Support | ${site.name}`}
+	description="Education guidance for people granted refugee status in the UK: explore university, college and training options, overseas qualifications, applications and funding."
+>
+	<Hero
+		eyebrow="Refugee education support"
+		titleLines={['Find your next step', 'in education.']}
+		text={`If you’ve been granted refugee status in the UK, ${site.name} can help you explore university, college and training options. Whether you want to return to education, build on qualifications gained overseas or prepare for a new career, we’ll help you work out what to do next.`}
+		primary={{ label: 'Discuss your study options', href: enquiryHref('consultation') }}
+		secondary={{ label: 'Refer someone for support', href: enquiryHref('referral') }}
+		image={heroImage}
+		imageAlt="An adviser goes through a document with two women at a table in a bright library."
+		imagePosition="object-[55%_50%]"
+	/>
+
+	<section class="py-12 lg:py-20" aria-labelledby="help-heading">
+		<Container>
+			<SectionHeading id="help-heading">How we can help</SectionHeading>
+			<ul class="mt-10 grid gap-6 lg:grid-cols-2">
+				{services.map((service, i) => (
+					<li data-reveal data-reveal-delay={String(i % 2)}>
+						<IconCard {...service} />
+					</li>
+				))}
+			</ul>
+		</Container>
+	</section>
+
+	<IntroSplit id="welcome-heading" title="A welcoming and respectful service" background="cream" align="start">
+		<p class="font-semibold text-navy">Everyone deserves to be treated with dignity and respect.</p>
+		<p>We welcome people with refugee status from all backgrounds, including LGBTIQ+ refugees. We take time to listen to your goals and circumstances, and you do not need to share distressing personal experiences to explain your educational ambitions.</p>
+		<p>Our guidance starts with what you want to achieve and the practical support you need to move forward.</p>
+	</IntroSplit>
+
+	<IntroSplit id="contact-steps-heading" title="What happens when you get in touch" action={{ label: 'Discuss your study options', href: enquiryHref('consultation') }}>
+		<p>We start with a conversation about what you’ve studied or done before and what you’d like to do next. Together, we identify suitable options and agree on practical steps, such as gathering documents, contacting a university or preparing an application.</p>
+	</IntroSplit>
+
+	<CtaBanner
+		id="charities-heading"
+		title="For charities and community organisations"
+		text="If you support people with refugee status who are ready to explore education or training, get in touch to discuss referrals or education information sessions."
+		action={{ label: 'Discuss referrals', href: enquiryHref('referral') }}
+		note="Please obtain the individual’s consent before sharing their personal information with us."
+	/>
+
+	<ContactSection
+		title="Take your next step"
+		intro="You do not need to have everything worked out before getting in touch. Start with a conversation about your goals, and we can explore the options together."
+		action={{ label: 'Enquire about education support', href: enquiryHref('consultation') }}
+		note="Admission, qualification recognition and funding decisions are made by the relevant institutions and organisations."
+	/>
+</BaseLayout>

@@ -1,0 +1,58 @@
+---
+// Shared wrapper for the site's forms. Works without JavaScript; main.js upgrades any [data-enquiry-form].
+import { routes } from '../../data/routes';
+import Button from '../Button.astro';
+
+interface Props {
+	/** PHP handler, e.g. /contact.php */
+	action: string;
+	/** Prefix for element ids, e.g. "contact" gives contact-website. */
+	form: string;
+	submitLabel: string;
+	/** Sentence shown under the button, before the Privacy Notice link. */
+	privacyNote: string;
+	/** Allow ?topic= to prefill the message box (contact form only). */
+	topicPrefill?: boolean;
+	/** Needed when the form includes a file upload. */
+	multipart?: boolean;
+}
+
+const { action, form, submitLabel, privacyNote, topicPrefill = false, multipart = false } = Astro.props;
+---
+
+<form
+	action={action}
+	method="post"
+	enctype={multipart ? 'multipart/form-data' : undefined}
+	class="relative space-y-6"
+	data-enquiry-form
+	data-topic-prefill={topicPrefill ? '' : undefined}
+>
+	<!-- Shown without JavaScript when the handler redirects back with ?error=1#form-error -->
+	<div id="form-error" class="hidden rounded-xl border border-red-700/30 bg-red-50 p-4 text-red-800 target:block" role="alert">
+		<p class="font-semibold">Sorry, your details could not be sent.</p>
+		<p class="mt-1 text-sm">Please check your details and try again, or contact us by email or telephone.</p>
+	</div>
+
+	<slot />
+
+	<!-- Spam trap: hidden from people and assistive technology. Anything typed here is discarded. -->
+	<div class="absolute -left-[10000px] size-px overflow-hidden" aria-hidden="true">
+		<label for={`${form}-website`}>Leave this field empty</label>
+		<input id={`${form}-website`} name="website" type="text" tabindex="-1" autocomplete="off" />
+	</div>
+
+	<div>
+		<Button type="submit" variant="teal" class="w-full sm:w-auto" data-submit>{submitLabel}</Button>
+		<p class="mt-4 text-sm text-dark-grey">
+			{privacyNote} Read our <a href={routes.privacy} class="font-semibold text-teal underline underline-offset-4 hover:text-navy">Privacy Notice</a>.
+		</p>
+	</div>
+
+	<p
+		class="rounded-xl text-base font-medium empty:hidden data-[state=error]:bg-red-50 data-[state=error]:p-4 data-[state=error]:text-red-800 data-[state=success]:bg-teal-pale data-[state=success]:p-4 data-[state=success]:text-navy"
+		role="status"
+		aria-live="polite"
+		data-form-status
+	></p>
+</form>

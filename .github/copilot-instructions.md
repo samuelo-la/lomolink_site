@@ -6,13 +6,14 @@ Read this file before making any change. If a request conflicts with something h
 
 A static information website for Lomolink Consulting, an education, training and recruitment consultancy. It explains what the company offers, shows the study areas it supports, and has a dedicated section for learners with refugee status. The tone is warm, respectful and professional. The audience is mostly UK-based.
 
-It is a brochure site with one contact form. There is no admin area, no database, no user accounts and no server-side framework.
+It is a brochure site with three forms (contact, candidate registration, employer enquiry). There is no admin area, no database, no user accounts and no server-side framework.
 
 ## Scope limits
 
 - Courses are not taken online. No course delivery, no learner login, no registration, no payments and no application process on this site. Course tiles and pages are information only.
-- The only form is the contact form. It collects three things: name, email and message. Do not add fields without being told to.
-- The site stores nothing. Messages are emailed to the company and not saved anywhere on the server.
+- There are exactly three forms, with exactly the fields listed under "Forms" below (owner decision, 18 November 2026, to collect candidate and employer details for recruitment). Do not add forms or fields without being told to. No phone number fields.
+- The only file upload is the optional CV on the candidate form: PDF or .docx, at most 5 MB, checked on the server, attached to the email and never saved.
+- The site stores nothing. Submissions (including CVs) are emailed to the company and not saved anywhere on the server.
 - No analytics, tracking pixels, chat widgets, embeds or third-party scripts. If analytics is ever added, a cookie consent banner is added with it.
 - Self-host fonts and icons. No CDN links.
 - There is no admin panel. Content changes are made by editing files and uploading a new build.
@@ -25,7 +26,7 @@ It is a brochure site with one contact form. There is no admin area, no database
 - Fonts from Fontsource packages (Inter and Playfair Display), self-hosted woff2.
 - `@astrojs/sitemap` for the sitemap.
 - Course data in `src/data/courses.json`.
-- One PHP file, `public/contact.php`, handles the form and sends email.
+- PHP form handlers in `public/`: `contact.php`, `candidate.php`, `employer.php`, sharing security code in `form-lib.php` (not web-accessible).
 
 Do not add a package without saying what it is for. Prefer no new dependency over a small one. Commit `package-lock.json`.
 
@@ -38,13 +39,14 @@ src/
                      CtaBanner, ContactSection, SectionHeading, Button, Container
     icons/           inline SVG icon components
   pages/             index, about, education-training,
-                     refugee-support, recruitment, contact, thank-you,
-                     privacy, 404
-  data/              courses.json, site.ts
+                     refugee-education-support, recruitment,
+                     recruitment/register, recruitment/employers,
+                     contact, thank-you, privacy, 404
+  data/              courses.json, site.ts, routes.ts
   scripts/main.js
   styles/global.css
-public/              images, robots.txt, .htaccess, contact.php,
-                     contact.config.example.php
+public/              robots.txt, .htaccess, contact.php, candidate.php,
+                     employer.php, form-lib.php, contact.config.example.php
 scripts/check-dist.mjs
 docs/design/         page mockups (git-ignored)
 docs/reference/      old Laravel code for reference only (git-ignored)
@@ -95,20 +97,20 @@ Use the company name and wording from the mockup. Contact person, email, phone a
 `BaseLayout.astro` holds the head (title, description, Open Graph, canonical), a skip-to-content link, the navbar, `<main id="content">` with a slot, and the footer.
 
 ### Navbar
-Navy background. Wordmark on the left. Links: Home, About Us, Education & Training, Refugee Support, Recruitment. Gold "Get in touch" button on the right, linking to the contact page. Sticky. After scrolling, `main.js` sets a `data-scrolled` attribute on the header and CSS adds a shadow and reduces vertical padding (not the other way round). Below `lg` the menu is a `<details>`-style or button-driven menu that still shows its links if JavaScript fails. Escape closes it. Links sit in a `<nav>` landmark with a label.
+Navy background. Wordmark on the left. Links: Home, About Us, Education & Training, Refugee Education Support, Recruitment. Gold "Get in touch" button on the right, linking to the contact page. Sticky. After scrolling, `main.js` sets a `data-scrolled` attribute on the header and CSS adds a shadow and reduces vertical padding (not the other way round). Below `xl` (1280px) the menu is a `<details>`-style or button-driven menu (owner chose the label "Refugee Education Support", which does not fit beside the logo at 1024px) that still shows its links if JavaScript fails. Escape closes it. Links sit in a `<nav>` landmark with a label.
 
 ### Homepage sections, in order
 1. **Hero.** Navy panel on the left with a small gold uppercase tagline on one line, a serif headline that sits on two lines ("Take the next step" / "towards your future.") from 1024px upward, the paragraph "Personalised guidance to help you explore study options, develop professional skills and find your career direction.", and two buttons side by side from `sm` upward (gold "Explore courses", outlined white "Book a consultation"). Photo on the right with an angled left edge using a Tailwind arbitrary `clip-path`. The text column takes about 46 to 48 percent of the container. The image extends to the right edge of the screen and is positioned relative to the container, so the text and the slanted edge never overlap at any width from 1024 to 2560px. On mobile the image stacks under the text. If the image file is missing, show a pale teal placeholder marked `aria-hidden`.
-2. **How we can help.** Three cards: Education guidance, Training and qualifications (award rosette icon), Healthcare recruitment. Icon on the left of the text, title, short text, "Learn more" link with an arrow.
+2. **How we can help.** Three cards: Education guidance, Training and qualifications (award rosette icon), Health and social care recruitment. Icon on the left of the text, title, short text, "Learn more" link with an arrow.
 3. **Explore education and training.** Six tiles on teal-pale: Adult Social Care & Healthcare, English & Mathematics, Digital Skills, Business & Management, Early Childhood Education, Education & Training. Three columns on desktop, two on tablet, one on mobile. Teal "View study options" button. Tiles come from `courses.json`.
 4. **Support for learners with refugee status.** Cream background, photo on the left, heading, paragraph and teal button on the right. Stacks on mobile.
 5. **A clear path forward.** Four numbered steps with gold circles and a connector line on desktop (inner pages use teal circles, as their mockups show): Tell us your goals, Explore your options, Plan your next steps, Apply with support. Steps stack on mobile.
 6. **Partnership banner.** Navy strip, headline, one line of text, gold "Discuss a partnership" button.
-7. **Contact section.** "Let's discuss your next step" with contact person, email, phone and website, plus a note that course availability, entry requirements and fees vary by programme. Email is a `mailto:` link and phone is a `tel:` link.
+7. **Contact section.** "Let's discuss your next step" with contact person, email, phone and website (owner removed the "fees vary by programme" note here and on the Contact page). Email is a `mailto:` link and phone is a `tel:` link.
 8. **Footer.** Quick links, contact details, privacy notice link, copyright line.
 
 ### Other pages
-About Us, Education & Training (the six course areas as cards, no category filter, each linking to its own details section further down the same page at `#<slug>`: owner decision, replacing separate `/study-options/[slug]` pages; homepage tiles link to `/education-training/#<slug>`), Refugee Support, Recruitment, Contact, Thank you (`noindex`), Privacy Notice, 404.
+About Us, Education & Training (the six course areas as cards, no category filter, each linking to its own details section further down the same page at `#<slug>`: owner decision, replacing separate `/study-options/[slug]` pages; homepage tiles link to `/education-training/#<slug>`), Refugee Education Support (at `/refugee-education-support/`, menu label "Refugee Education Support"; owner-approved mix of both copy briefs: updated-brief hero text with both buttons, six titled "How we can help" cards (first-brief headings, updated-brief text, sixth card from the first brief), "A welcoming and respectful service" (first brief), "What happens when you get in touch" with "Discuss your study options" (topic `consultation`), charities banner with "Discuss referrals" (topic `referral`) and the consent note, and the "Take your next step" contact strip (first brief)), Recruitment, Contact, Thank you (`noindex`), Privacy Notice, 404.
 
 ## Components
 
@@ -128,30 +130,34 @@ About Us, Education & Training (the six course areas as cards, no category filte
 - Everything is disabled under `prefers-reduced-motion: reduce`.
 - No auto-playing carousels, no parallax, no scroll hijacking.
 
-## Contact form
+## Forms
 
-Front end on `/contact/`:
-- Fields: name, email, message. Visible labels, inline errors linked with `aria-describedby`, a visible focus state, and a line under the button: "We use your details only to reply to your enquiry." with a link to the Privacy Notice.
-- The form is a normal HTML form that posts to `/contact.php`. It works without JavaScript.
-- `main.js` upgrades it: it sends the form with `fetch` (header `Accept: application/json`), shows the result in an `aria-live` region, and does not reload the page.
-- Buttons elsewhere can link to `/contact/?topic=<value>`. Allowed values (owner-approved): `consultation`, `partnership`, `referral`, `candidate`, `employer`. Use them only to prefill the start of the message box with a fixed short sentence. Ignore any other value. Topics never add form fields.
+Three forms, each a normal HTML form that works without JavaScript, with visible labels, inline errors linked with `aria-describedby`, a visible focus state, a honeypot field named `website`, and a line under the button linking to the Privacy Notice. `main.js` upgrades them: client-side checks, `fetch` submission (header `Accept: application/json`), result in an `aria-live` region, no page reload.
 
-Back end in `public/contact.php` (PHP 8.1+, `declare(strict_types=1)`):
+1. **Contact** (`/contact/` → `/contact.php`): name (required, max 100), email (required, max 150), message (required, 10 to 2000). Line under the button: "We use your details only to reply to your enquiry." Buttons elsewhere can link to `/contact/?topic=<value>`. Allowed values (owner-approved): `consultation`, `partnership`, `referral`, `candidate`, `employer`. Use them only to prefill the start of the message box with a fixed short sentence. Ignore any other value. Topics never add form fields.
+2. **Candidate registration** (`/recruitment/register/` → `/candidate.php`): name (required, max 100), email (required, max 150), preferred role (required, one of: care assistant, support worker, domiciliary care worker, other), town or area (required, max 100), availability (at least one of: weekdays, weekends, day shifts, night shifts), driving status (required, one of: full UK licence and car, full UK licence no car, no licence), CV (optional), anything else (optional, max 2000), consent to share details and CV with employers about suitable roles (required checkbox). The page asks candidates not to include date of birth, health information or ID documents.
+3. **Employer enquiry** (`/recruitment/employers/` → `/employer.php`): organisation (required, max 150), contact name (required, max 100), email (required, max 150), role (required, max 150), location (required, max 100), shift pattern (required, max 200), essential requirements (required, 10 to 2000).
+
+CV upload rules (`candidate.php`):
+- Optional, one file, at most 5 MB. Only PDF and .docx. The type is decided from the file contents, never from the name or the browser's MIME type: PDFs must start with `%PDF-`; .docx must be a real ZIP Office document with `word/document.xml`, no macros (`vbaProject.bin`, `macroEnabled`), no embedded objects or ActiveX, and a sane uncompressed size. PDFs containing `/JavaScript`, `/JS`, `/Launch`, `/EmbeddedFile` or `/RichMedia` are rejected (a basic check; the mailbox's own virus scanning is the main malware defence).
+- The file is read from PHP's temporary upload location (checked with `is_uploaded_file`), attached to the email as `CV.pdf` or `CV.docx`, and never written anywhere. The visitor's file name is never used.
+
+Back end, shared by all three handlers through `public/form-lib.php` (PHP 8.1+, `declare(strict_types=1)`; `form-lib.php` refuses direct requests and is blocked in `.htaccess`):
 - Accept POST only, otherwise return 405.
 - Settings come from `contact.config.php` on the server (site host, recipient, sender address, rate-limit secret). Only `contact.config.example.php` with placeholder values is committed (exception, owner decision: its `recipient` is the public contact address `peter@lomolinkconsulting.com`, which also appears on every page; the rate-limit secret stays a placeholder). `contact.config.php` is git-ignored and blocked from direct web access in `.htaccess`.
 - Check that the `Origin` or `Referer` host matches the site host.
-- Validate: name required, max 100; email required, valid, max 150; message required, 10 to 2000 characters. Trim all values and strip control characters.
+- Validate every field against the rules above; choice fields only accept their listed values. Trim all values and strip control characters.
 - Honeypot field named `website`. If it is filled, pretend success and send nothing.
-- Rate limit: at most 5 submissions per hour per visitor. Count by a keyed hash of the IP address, held in a small file in a directory outside the web root, expiring after an hour. Never store a raw IP address and never store message content.
+- Rate limit: at most 5 submissions per hour per visitor, counted across all three forms. Count by a keyed hash of the IP address, held in a small file in a directory outside the web root, expiring after an hour. Never store a raw IP address and never store message content.
 - Email: fixed subject line, plain-text body, `From` is a fixed address on the site's own domain, `Reply-To` is the visitor's address only after it passes validation with every CR and LF removed. Never put visitor input into a subject or any other header.
-- Responses: JSON when `Accept: application/json` is present, otherwise a 303 redirect to `/thank-you/` on success or `/contact/?error=1` on failure. Use fixed messages only. Never echo submitted data back. Send `Cache-Control: no-store` and `X-Content-Type-Options: nosniff`.
+- Responses: JSON when `Accept: application/json` is present, otherwise a 303 redirect to `/thank-you/` on success or back to the form's page with `?error=1#form-error` on failure. Use fixed messages only. Never echo submitted data back. Send `Cache-Control: no-store` and `X-Content-Type-Options: nosniff`.
 - Do not log names, emails or messages. Log only generic failure codes.
 
 ## Company details and course data
 
 - Company details live in `src/data/site.ts`: name (Lomolink Consulting), contact person, email, phone, website, `enquiryUrl`. The owner supplied real values on 17 November 2026. Never hardcode these in components.
 - The domain is `lomolinkconsulting.com` (set as `site` in `astro.config.mjs`).
-- `src/data/courses.json` is an array of course areas. Each has `slug` (also the details-section anchor), `title`, `category`, `icon`, `summary` (owner-supplied card text), `description` and `qualifications` (example qualification names taken from the owner's Education & Training mockup, approved by the owner). Every course details section carries a note that availability, entry requirements and fees vary by programme and should be confirmed through an enquiry. Do not list prices, start dates, accreditation or awarding bodies unless supplied.
+- `src/data/courses.json` is an array of course areas. Each has `slug` (also the details-section anchor), `title`, `category`, `icon`, `summary` (owner-supplied card text), `description` and `qualifications` (example qualification names taken from the owner's Education & Training mockup, approved by the owner). Course details sections carry no "fees vary by programme" note (owner decision, 18 November 2026; fee notes were removed site-wide). Do not list prices, start dates, accreditation or awarding bodies unless supplied.
 
 ## Content and imagery
 
@@ -163,7 +169,7 @@ Back end in `public/contact.php` (PHP 8.1+, `declare(strict_types=1)`):
 
 ## Privacy notice
 
-A short, plain page. It says who runs the site and how to contact them; that the contact form collects name, email and message; that these are used only to reply to the enquiry; that the site does not store them and they arrive by email at the company mailbox, where the company's own retention applies; that nothing is sold or shared for marketing; that a short-lived, hashed record of the visitor's address is used only to limit spam; that the site sets no cookies and uses no tracking; and how to ask for a copy or deletion of data. Mark it as needing review by the business owner before launch. Do not present it as legal advice.
+A short, plain page. It says who runs the site and how to contact them; what each of the three forms collects; that contact and employer details are used only to deal with the enquiry; that candidate details and CVs are used to find suitable roles and shared with employers only with the candidate's consent, which can be withdrawn; that uploaded CVs are checked and emailed, not stored on the site; that the site does not store them and they arrive by email at the company mailbox, where the company's own retention applies; that nothing is sold or shared for marketing; that a short-lived, hashed record of the visitor's address is used only to limit spam; that the site sets no cookies and uses no tracking; and how to ask for a copy or deletion of data. Mark it as needing review by the business owner before launch. Do not present it as legal advice.
 
 ## Security
 
@@ -220,7 +226,7 @@ Every item is required.
 
 ## Things not to do
 
-- Do not add form fields, accounts, uploads, a database, an admin area or any server-side framework.
+- Do not add form fields, accounts, uploads (other than the candidate CV described under "Forms"), a database, an admin area or any server-side framework.
 - Do not change the colour tokens, fonts or section order without being told to.
 - Do not add pages, packages or integrations that are not listed here without asking.
 - Do not leave `console.log` or commented-out code behind.

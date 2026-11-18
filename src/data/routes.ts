@@ -6,8 +6,10 @@ export const routes = {
 	educationTraining: '/education-training/',
 	/** Each course area has a details section on the Education & Training page. */
 	courseArea: (slug: string) => `/education-training/#${slug}`,
-	refugeeSupport: '/refugee-support/',
+	refugeeSupport: '/refugee-education-support/',
 	recruitment: '/recruitment/',
+	recruitmentRegister: '/recruitment/register/',
+	recruitmentEmployers: '/recruitment/employers/',
 	contact: '/contact/',
 	thankYou: '/thank-you/',
 	privacy: '/privacy/',
@@ -17,7 +19,7 @@ export const mainNav = [
 	{ href: routes.home, label: 'Home' },
 	{ href: routes.about, label: 'About Us' },
 	{ href: routes.educationTraining, label: 'Education & Training' },
-	{ href: routes.refugeeSupport, label: 'Refugee Support' },
+	{ href: routes.refugeeSupport, label: 'Refugee Education Support' },
 	{ href: routes.recruitment, label: 'Recruitment' },
 ] as const;
 

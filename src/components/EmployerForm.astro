@@ -1,0 +1,28 @@
+---
+// Employer staffing enquiry. Posts to /employer.php.
+import FormField from './forms/FormField.astro';
+import FormShell from './forms/FormShell.astro';
+
+const f = 'employer';
+---
+
+<FormShell action="/employer.php" form={f} submitLabel="Send staffing enquiry" privacyNote="We use your details only to deal with your staffing enquiry.">
+	<FormField form={f} name="organisation" label="Organisation name" required maxlength={150} autocomplete="organization" error="Please enter your organisation name (up to 150 characters)." />
+	<FormField form={f} name="name" label="Contact name" required maxlength={100} autocomplete="name" error="Please enter a contact name (up to 100 characters)." />
+	<FormField form={f} name="email" label="Email address" type="email" required maxlength={150} autocomplete="email" error="Please enter a valid email address, for example name@example.com." />
+	<FormField form={f} name="role" label="Role you need to fill" required maxlength={150} hint="For example: care assistant, support worker or domiciliary care worker." error="Please tell us the role you need to fill (up to 150 characters)." />
+	<FormField form={f} name="location" label="Location" required maxlength={100} hint="Town or area where the role is based." error="Please enter the location (up to 100 characters)." />
+	<FormField form={f} name="shifts" label="Shift pattern" required maxlength={200} hint="For example: days, nights, weekends, hours per week." error="Please describe the shift pattern (up to 200 characters)." />
+	<FormField
+		form={f}
+		name="requirements"
+		label="Essential requirements"
+		type="textarea"
+		rows={6}
+		required
+		minlength={10}
+		maxlength={2000}
+		hint="Experience, training, qualifications or anything else candidates must have (10 to 2,000 characters)."
+		error="Please describe the essential requirements (10 to 2,000 characters)."
+	/>
+</FormShell>

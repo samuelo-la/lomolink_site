@@ -8,7 +8,7 @@ import Wordmark from './Wordmark.astro';
 const currentPath = Astro.url.pathname;
 const isCurrent = (href: string) => currentPath === href || (href !== '/' && currentPath.startsWith(href));
 const linkClasses =
-	'relative inline-block py-1 transition-colors duration-200 hover:text-gold after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:bg-gold after:transition-transform after:duration-200 hover:after:scale-x-100 aria-[current=page]:after:scale-x-100';
+	'relative inline-block py-1 whitespace-nowrap transition-colors duration-200 hover:text-gold after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:bg-gold after:transition-transform after:duration-200 hover:after:scale-x-100 aria-[current=page]:after:scale-x-100';
 ---
 
 <header
@@ -19,14 +19,15 @@ const linkClasses =
 	<Container class="flex items-center justify-between gap-6 py-4 group-data-[scrolled]/header:py-2.5">
 		<Wordmark />
 
-		<nav aria-label="Main" class="hidden items-center gap-6 lg:flex xl:gap-8">
-			<ul class="flex items-center gap-5 text-sm font-medium text-white xl:gap-7">
+		<!-- Full menu from xl (1280px): the "Refugee Education Support" label does not fit beside the logo at 1024px. -->
+		<nav aria-label="Main" class="hidden items-center gap-8 xl:flex">
+			<ul class="flex items-center gap-7 text-sm font-medium text-white">
 				{mainNav.map((link) => <li><a href={link.href} class={linkClasses} aria-current={isCurrent(link.href) ? 'page' : undefined}>{link.label}</a></li>)}
 			</ul>
 			<Button href={enquiryHref()} variant="gold" size="sm">Get in touch</Button>
 		</nav>
 
-		<details class="group/menu lg:hidden" data-mobile-menu>
+		<details class="group/menu xl:hidden" data-mobile-menu>
 			<summary class="flex cursor-pointer list-none rounded-md p-2 text-white [&::-webkit-details-marker]:hidden" aria-label="Menu" data-menu-summary>
 				<Icon name="menu" class="size-6 group-open/menu:hidden" />
 				<Icon name="close" class="hidden size-6 group-open/menu:block" />

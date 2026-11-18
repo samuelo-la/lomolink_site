@@ -1,0 +1,50 @@
+---
+import CandidateForm from '../../components/CandidateForm.astro';
+import ContactList from '../../components/ContactList.astro';
+import Container from '../../components/Container.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import { routes } from '../../data/routes';
+import { site } from '../../data/site';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+	title={`Register your interest | Health and Social Care Recruitment | ${site.name}`}
+	description="Register your interest in care assistant, support worker and domiciliary care roles in the UK with Lomolink Consulting."
+>
+	<PageHeader
+		eyebrow="Health and social care recruitment"
+		title="Register your interest"
+		intro="Tell us about your experience, where you can work and the shifts you’re available for. We’ll be in touch by email if there’s a suitable opportunity."
+	/>
+
+	<section class="py-12 lg:py-20">
+		<Container class="grid gap-12 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-16">
+			<div class="space-y-8">
+				<div>
+					<SectionHeading id="next-heading" align="left">What happens next</SectionHeading>
+					<p class="mt-6 text-lg leading-relaxed text-dark-grey">Candidates share their details so we can understand what roles may suit them. We’ll get in touch if there’s a suitable opportunity to discuss.</p>
+				</div>
+				<div class="rounded-xl bg-cream p-5 text-sm leading-relaxed text-dark-grey">
+					<h2 class="font-semibold text-navy">About your CV</h2>
+					<p class="mt-2">A CV is optional. If you add one, please upload a PDF or Word (.docx) file up to 5 MB.</p>
+					<p class="mt-2">Please leave out your date of birth, health information and any ID or right-to-work documents. If we need anything else, we will ask you later.</p>
+					<p class="mt-2">Your CV is emailed to us securely and is not stored on this website. We share it with employers only with your consent. See our <a href={routes.privacy} class="font-semibold text-teal underline underline-offset-4 hover:text-navy">Privacy Notice</a>.</p>
+				</div>
+				<div>
+					<h2 class="font-semibold text-navy">Prefer to talk first?</h2>
+					<div class="mt-4">
+						<ContactList layout="stack" />
+					</div>
+				</div>
+			</div>
+
+			<div class="rounded-xl border border-navy/10 bg-white p-6 shadow-card sm:p-8 lg:p-10">
+				<h2 class="font-display text-2xl font-semibold text-navy lg:text-[28px]">Your details</h2>
+				<span class="mt-3 mb-8 block h-[3px] w-12 bg-gold" aria-hidden="true"></span>
+				<CandidateForm />
+			</div>
+		</Container>
+	</section>
+</BaseLayout>

@@ -1,0 +1,71 @@
+---
+// One labelled form control with an optional hint and an error line that main.js fills in.
+interface Option {
+	value: string;
+	label: string;
+}
+
+interface Props {
+	form: string;
+	name: string;
+	label: string;
+	type?: 'text' | 'email' | 'textarea' | 'select' | 'file' | 'checkbox';
+	required?: boolean;
+	maxlength?: number;
+	minlength?: number;
+	rows?: number;
+	hint?: string;
+	/** Message shown when the value is missing or invalid. */
+	error: string;
+	autocomplete?: string;
+	options?: Option[];
+	accept?: string;
+	maxBytes?: number;
+}
+
+const { form, name, label, type = 'text', required = false, maxlength, minlength, rows = 6, hint, error, autocomplete, options = [], accept, maxBytes } = Astro.props;
+const id = `${form}-${name}`;
+const hintId = hint ? `${id}-hint` : undefined;
+const errorId = `${id}-error`;
+const control =
+	'mt-2 block w-full rounded-xl border border-navy/25 bg-white px-4 py-3 text-dark-grey transition-colors focus-visible:border-teal aria-[invalid=true]:border-red-700';
+const labelClasses = 'block font-semibold text-navy';
+const errorClasses = 'mt-2 hidden text-sm font-medium text-red-700';
+const common = { id, name, required, 'aria-describedby': hintId, 'data-field': name, 'data-error-message': error };
+---
+
+{type === 'checkbox' ? (
+	<div>
+		<div class="flex items-start gap-3">
+			<input {...common} type="checkbox" value="yes" class="mt-1 size-5 shrink-0 accent-teal" />
+			<label for={id} class="text-dark-grey">{label}</label>
+		</div>
+		{hint && <p id={hintId} class="mt-1 ml-8 text-sm text-dark-grey">{hint}</p>}
+		<p id={errorId} class={errorClasses} data-error-for={name}></p>
+	</div>
+) : (
+	<div>
+		<label for={id} class={labelClasses}>
+			{label}{!required && <span class="font-normal text-dark-grey"> (optional)</span>}
+		</label>
+		{hint && <p id={hintId} class="mt-1 text-sm text-dark-grey">{hint}</p>}
+		{type === 'textarea' && <textarea {...common} rows={rows} minlength={minlength} maxlength={maxlength} class={control}></textarea>}
+		{type === 'select' && (
+			<select {...common} class={control}>
+				<option value="">Please choose…</option>
+				{options.map((option) => <option value={option.value}>{option.label}</option>)}
+			</select>
+		)}
+		{type === 'file' && (
+			<input
+				{...common}
+				type="file"
+				accept={accept}
+				data-max-bytes={maxBytes}
+				class="mt-2 block w-full rounded-xl border border-dashed border-navy/30 bg-white p-3 text-sm text-dark-grey file:mr-4 file:cursor-pointer file:rounded-lg file:border-0 file:bg-teal-pale file:px-4 file:py-2 file:font-semibold file:text-navy aria-[invalid=true]:border-red-700"
+			/>
+		)}
+		{(type === 'text' || type === 'email') && <input {...common} type={type} autocomplete={autocomplete} minlength={minlength} maxlength={maxlength} class={control} />}
+		<p id={errorId} class={errorClasses} data-error-for={name}></p>
+	</div>
+)}

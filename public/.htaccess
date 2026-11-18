@@ -9,7 +9,7 @@ RewriteRule ^ https://lomolinkconsulting.com%{REQUEST_URI} [R=301,L]
 
 ErrorDocument 404 /404.html
 
-<FilesMatch "(^\.|\.map$|^contact\.config(\.example)?\.php$)">
+<FilesMatch "(^\.|\.map$|^contact\.config(\.example)?\.php$|^form-lib\.php$)">
 	Require all denied
 </FilesMatch>
 

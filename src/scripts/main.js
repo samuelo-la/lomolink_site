@@ -20,44 +20,68 @@ document.addEventListener('keydown', (event) => {
 	if (event.key === 'Escape') closeMenu();
 });
 
-// Contact form: topic prefill, inline validation and fetch submission. Without JavaScript it posts normally.
-const contactForm = document.querySelector('[data-contact-form]');
-if (contactForm) upgradeContactForm(contactForm);
+// Forms: inline validation and fetch submission. Without JavaScript they post normally and the server checks everything.
+document.querySelectorAll('[data-enquiry-form]').forEach(upgradeForm);
 
-function upgradeContactForm(form) {
+function upgradeForm(form) {
 	const topicSentences = {
 		consultation: 'I would like to book a consultation. ',
 		partnership: 'I would like to discuss a partnership. ',
 		referral: 'I would like to discuss a referral. ',
-		candidate: 'I am interested in healthcare roles. ',
+		candidate: 'I am interested in health and social care roles. ',
 		employer: 'I would like to discuss our staffing needs. ',
 	};
-	const genericError = 'Sorry, your message could not be sent. Please try again, or contact us by email or telephone.';
-	const rules = {
-		name: (value) => {
-			if (!value) return 'Please enter your name.';
-			if (value.length > 100) return 'Please keep your name to 100 characters or fewer.';
-			return '';
-		},
-		email: (value) => {
-			if (!value) return 'Please enter your email address.';
-			if (value.length > 150 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Please enter a valid email address, for example name@example.com.';
-			return '';
-		},
-		message: (value) => {
-			if (value.length < 10) return 'Please write a message of at least 10 characters.';
-			if (value.length > 2000) return 'Please keep your message to 2,000 characters or fewer.';
-			return '';
-		},
-	};
-
+	const genericError = 'Sorry, your details could not be sent. Please try again, or contact us by email or telephone.';
+	const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 	const status = form.querySelector('[data-form-status]');
 	const submit = form.querySelector('[data-submit]');
-	const field = (name) => form.elements.namedItem(name);
+	const fields = [...form.querySelectorAll('[data-field]')];
+	const fieldByName = (name) => fields.find((field) => field.dataset.field === name);
 
-	const topic = new URLSearchParams(window.location.search).get('topic');
-	const message = field('message');
-	if (topic && Object.hasOwn(topicSentences, topic) && message && !message.value) message.value = topicSentences[topic];
+	if (form.hasAttribute('data-topic-prefill')) {
+		const topic = new URLSearchParams(window.location.search).get('topic');
+		const message = fieldByName('message');
+		if (topic && Object.hasOwn(topicSentences, topic) && message && !message.value) message.value = topicSentences[topic];
+	}
+
+	// Keep each field's hint in aria-describedby; the error id is added only while an error shows.
+	fields.forEach((field) => {
+		field.dataset.baseDescribedby = field.getAttribute('aria-describedby') ?? '';
+	});
+
+	const isValid = (field) => {
+		if (field.tagName === 'FIELDSET') return field.querySelectorAll('input:checked').length >= Number(field.dataset.min || 1);
+		if (field.type === 'checkbox') return !field.required || field.checked;
+		if (field.type === 'file') {
+			const file = field.files?.[0];
+			if (!file) return !field.required;
+			return /\.(pdf|docx)$/i.test(file.name) && file.size > 0 && file.size <= Number(field.dataset.maxBytes);
+		}
+		const value = field.value.trim();
+		if (!value) return !field.required;
+		if (field.maxLength > 0 && value.length > field.maxLength) return false;
+		if (field.minLength > 0 && value.length < field.minLength) return false;
+		if (field.type === 'email' && !emailPattern.test(value)) return false;
+		return true;
+	};
+
+	const showError = (field, text) => {
+		const error = form.querySelector(`[data-error-for="${field.dataset.field}"]`);
+		if (!error) return;
+		error.textContent = text;
+		error.classList.toggle('hidden', !text);
+		const targets = field.tagName === 'FIELDSET' ? field.querySelectorAll('input') : [field];
+		targets.forEach((input) => input.setAttribute('aria-invalid', text ? 'true' : 'false'));
+		const describedBy = [field.dataset.baseDescribedby, text ? error.id : ''].filter(Boolean).join(' ');
+		if (describedBy) field.setAttribute('aria-describedby', describedBy);
+		else field.removeAttribute('aria-describedby');
+	};
+
+	const check = (field) => {
+		const valid = isValid(field);
+		showError(field, valid ? '' : field.dataset.errorMessage);
+		return valid;
+	};
 
 	const setStatus = (text, state) => {
 		status.textContent = text;
@@ -65,47 +89,29 @@ function upgradeContactForm(form) {
 		else delete status.dataset.state;
 	};
 
-	const showError = (name, text) => {
-		const input = field(name);
-		const error = form.querySelector(`[data-error-for="${name}"]`);
-		if (!input || !error) return;
-		const hint = name === 'message' ? 'contact-message-hint' : '';
-		error.textContent = text;
-		error.classList.toggle('hidden', !text);
-		input.setAttribute('aria-invalid', text ? 'true' : 'false');
-		input.setAttribute('aria-describedby', [hint, text ? error.id : ''].filter(Boolean).join(' '));
-		if (!input.getAttribute('aria-describedby')) input.removeAttribute('aria-describedby');
-	};
-
-	const validate = () => {
-		let firstInvalid = null;
-		for (const [name, rule] of Object.entries(rules)) {
-			const text = rule(field(name).value.trim());
-			showError(name, text);
-			if (text && !firstInvalid) firstInvalid = field(name);
-		}
-		return firstInvalid;
-	};
-
 	form.noValidate = true;
 
-	Object.keys(rules).forEach((name) => {
-		field(name).addEventListener('input', () => {
-			if (field(name).getAttribute('aria-invalid') === 'true') showError(name, rules[name](field(name).value.trim()));
-		});
+	fields.forEach((field) => {
+		const recheck = () => {
+			const invalidNow = field.tagName === 'FIELDSET' ? field.querySelector('[aria-invalid="true"]') : field.getAttribute('aria-invalid') === 'true';
+			if (invalidNow) check(field);
+		};
+		field.addEventListener('input', recheck);
+		field.addEventListener('change', field.type === 'file' ? () => check(field) : recheck);
 	});
 
 	form.addEventListener('submit', async (event) => {
 		event.preventDefault();
-		const firstInvalid = validate();
-		if (firstInvalid) {
+		const invalid = fields.filter((field) => !check(field));
+		if (invalid.length) {
 			setStatus('Please check the highlighted fields.', 'error');
-			firstInvalid.focus();
+			const first = invalid[0];
+			(first.tagName === 'FIELDSET' ? first.querySelector('input') : first).focus();
 			return;
 		}
 
 		submit.disabled = true;
-		setStatus('Sending your message…');
+		setStatus('Sending…');
 		try {
 			const response = await fetch(form.action, {
 				method: 'POST',
@@ -116,10 +122,15 @@ function upgradeContactForm(form) {
 			const data = await response.json().catch(() => ({}));
 			if (response.ok && data.ok) {
 				form.reset();
-				setStatus(data.message || 'Thank you. Your message has been sent and we will reply by email.', 'success');
+				setStatus(typeof data.message === 'string' ? data.message : 'Thank you. Your details have been sent.', 'success');
 				return;
 			}
-			if (data.errors) Object.entries(data.errors).forEach(([name, text]) => showError(name, String(text)));
+			if (data.errors && typeof data.errors === 'object') {
+				Object.entries(data.errors).forEach(([name, text]) => {
+					const field = fieldByName(name);
+					if (field) showError(field, String(text));
+				});
+			}
 			setStatus(typeof data.message === 'string' ? data.message : genericError, 'error');
 		} catch {
 			setStatus(genericError, 'error');

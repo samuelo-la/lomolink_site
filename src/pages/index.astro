@@ -19,7 +19,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 const services: { icon: IconName; title: string; text: string; href: string }[] = [
 	{ icon: 'graduation-cap', title: 'Education guidance', text: 'Explore suitable study options and get support with your application.', href: routes.educationTraining },
 	{ icon: 'award', title: 'Training and qualifications', text: 'Explore courses to develop your skills and support your career goals.', href: routes.educationTraining },
-	{ icon: 'heart-pulse', title: 'Healthcare recruitment', text: 'Support for candidates and employers seeking the right match.', href: routes.recruitment },
+	{ icon: 'heart-pulse', title: 'Health and social care recruitment', text: 'Support for candidates and care providers seeking the right match.', href: routes.recruitment },
 ];
 
 const steps = ['Tell us your goals', 'Explore your options', 'Plan your next steps', 'Apply with support'];
@@ -95,5 +95,5 @@ const steps = ['Tell us your goals', 'Explore your options', 'Plan your next ste
 		action={{ label: 'Discuss a partnership', href: enquiryHref('partnership') }}
 	/>
 
-	<ContactSection title="Let’s discuss your next step" note="Course availability, entry requirements and fees vary by programme." />
+	<ContactSection title="Let’s discuss your next step" />
 </BaseLayout>

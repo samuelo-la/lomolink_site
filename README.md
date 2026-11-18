@@ -1,13 +1,13 @@
 # Lomolink Consulting website
 
-Static brochure website for Lomolink Consulting (education guidance, training support and healthcare recruitment, UK audience), built with [Astro](https://astro.build) and Tailwind CSS 4. It has one contact form, handled by a small PHP file. There is no database, admin area or user accounts, and the site stores nothing.
+Static brochure website for Lomolink Consulting (education guidance, training support and health and social care recruitment, UK audience), built with [Astro](https://astro.build) and Tailwind CSS 4. It has three forms (contact, candidate registration, employer enquiry), handled by small PHP files. There is no database, admin area or user accounts, and the site stores nothing.
 
 Project rules (stack, design tokens, security, content) live in [.github/copilot-instructions.md](.github/copilot-instructions.md). Read it before making changes.
 
 ## Requirements
 
 - Node.js 22.23.4 or newer (see `engines` in `package.json`)
-- For the contact form on the server: PHP 8.1 or newer with the `mbstring` extension, and working `mail()`
+- For the forms on the server: PHP 8.1 or newer (use the newest your host offers) with the `mbstring` and `zip` extensions, working `mail()`, and these settings (cPanel → Select PHP Version → Options): `file_uploads = On`, `upload_max_filesize` at least `8M`, `post_max_size` at least `10M`
 
 ## Commands
 
@@ -33,6 +33,8 @@ Run `npm run build` and `npm run check` before every commit and every upload.
 | Colours and fonts | `src/styles/global.css` (`@theme` tokens) |
 | Privacy Notice | `src/pages/privacy.astro` (update `lastUpdated` when you change it) |
 
+Forms: `/contact/` (contact.php), `/recruitment/register/` (candidate.php, with optional CV upload) and `/recruitment/employers/` (employer.php). All three share the security code in `public/form-lib.php` and email the submission; nothing is stored. CVs must be PDF or .docx up to 5 MB and are checked by content (macros, scripts and embedded objects are rejected), then attached to the email as `CV.pdf` or `CV.docx`.
+
 Contact form topics: buttons can link to `/contact/?topic=consultation`, `partnership`, `referral`, `candidate` or `employer` to prefill the start of the message. Other values are ignored.
 
 ## Deployment (Apache or LiteSpeed shared hosting)
@@ -48,10 +50,10 @@ Contact form topics: buttons can link to `/contact/?topic=consultation`, `partne
    - Add SPF, DKIM and DMARC records for `lomolinkconsulting.com`.
    - If the mailbox is hosted elsewhere (for example Google Workspace or Microsoft 365), set the host's email routing to "Remote Mail Exchanger" (cPanel: Email Routing). Otherwise the server may try to deliver locally and enquiries will not arrive.
 5. After uploading:
-   - Send a test enquiry and check it arrives (and is not marked as spam).
+   - Send a test through each of the three forms, including a candidate registration with a small PDF CV, and check they arrive (and are not marked as spam).
    - Check `https://lomolinkconsulting.com`, `http://` and `www.` all end up on `https://lomolinkconsulting.com`.
    - Check response headers with an online header checker (Content-Security-Policy, X-Frame-Options and the others in `.htaccess`).
-   - Check that `/contact.config.php` returns 403.
+   - Check that `/contact.config.php` and `/form-lib.php` return 403.
 6. Once HTTPS is confirmed working, raise `Strict-Transport-Security` in `public/.htaccess` from `max-age=300` to `max-age=31536000`, rebuild and upload `.htaccess` again.
 
 If the site sits behind a proxy or CDN (for example Cloudflare), tell the developer: the HTTPS redirect and the contact form rate limit both need adjusting to use the forwarded visitor details.

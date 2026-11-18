@@ -15,7 +15,7 @@ import heroImage from '../assets/images/Education and Training banner page.png';
 import practicalImage from '../assets/images/Education and Training practical skills section.png';
 import SplitFeature from '../components/SplitFeature.astro';
 
-const steps = ['Tell us your goals', 'Review suitable courses', 'Check requirements and fees', 'Prepare your application'];
+const steps = ['Tell us your goals', 'Review suitable courses', 'Check entry requirements', 'Prepare your application'];
 ---
 
 <BaseLayout
@@ -32,15 +32,9 @@ const steps = ['Tell us your goals', 'Review suitable courses', 'Check requireme
 		imagePosition="object-[60%_50%]"
 	/>
 
-	<SplitFeature
-		id="fits-heading"
-		title="Learning that fits your next step"
-		background="white"
-		image={practicalImage}
-		imageAlt="A tutor in a healthcare uniform shows a group of adult learners how to take a blood pressure reading."
-	>
+	<IntroSplit id="fits-heading" title="Learning that fits your next step">
 		<p>Whether you are returning to education, preparing for university or developing workplace skills, we help you explore suitable courses and understand how to apply.</p>
-	</SplitFeature>
+	</IntroSplit>
 
 	<section id="course-areas" class="pb-12 lg:pb-20" aria-labelledby="areas-heading">
 		<Container>
@@ -53,7 +47,7 @@ const steps = ['Tell us your goals', 'Review suitable courses', 'Check requireme
 				))}
 			</ul>
 			<p class="mt-8 text-center text-dark-grey">
-				<a href={routes.contact} class="font-semibold text-teal underline-offset-4 hover:text-navy hover:underline">Contact us</a> for current availability, awarding organisations, entry requirements, fees and assessment arrangements.
+				<a href={routes.contact} class="font-semibold text-teal underline-offset-4 hover:text-navy hover:underline">Contact us</a> for current availability, awarding organisations, entry requirements and assessment arrangements.
 			</p>
 		</Container>
 	</section>
@@ -68,9 +62,15 @@ const steps = ['Tell us your goals', 'Review suitable courses', 'Check requireme
 		</Container>
 	</section>
 
-	<IntroSplit id="returning-heading" title="Returning to education?" background="cream" action={{ label: 'Get personalised guidance', href: enquiryHref('consultation') }}>
+	<SplitFeature
+		id="returning-heading"
+		title="Returning to education?"
+		action={{ label: 'Get personalised guidance', href: enquiryHref('consultation') }}
+		image={practicalImage}
+		imageAlt="A tutor in a healthcare uniform shows a group of adult learners how to take a blood pressure reading."
+	>
 		<p>We welcome learners from all backgrounds, including people with refugee status. Start with a conversation about your qualifications, experience and ambitions.</p>
-	</IntroSplit>
+	</SplitFeature>
 
 	<section class="py-12 lg:py-20" aria-labelledby="started-heading">
 		<Container>

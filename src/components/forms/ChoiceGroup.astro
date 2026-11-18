@@ -1,0 +1,42 @@
+---
+// A group of radio buttons (pick one) or checkboxes (pick at least `min`) inside a fieldset with a legend.
+interface Option {
+	value: string;
+	label: string;
+}
+
+interface Props {
+	form: string;
+	name: string;
+	legend: string;
+	type: 'radio' | 'checkbox';
+	options: Option[];
+	error: string;
+	hint?: string;
+	/** Checkbox groups: minimum number of boxes to tick. */
+	min?: number;
+}
+
+const { form, name, legend, type, options, error, hint, min = 1 } = Astro.props;
+const id = `${form}-${name}`;
+const hintId = hint ? `${id}-hint` : undefined;
+// PHP collects checkbox groups as arrays when the name ends in [].
+const inputName = type === 'checkbox' ? `${name}[]` : name;
+---
+
+<fieldset data-field={name} data-min={min} data-error-message={error} aria-describedby={hintId}>
+	<legend class="font-semibold text-navy">{legend}</legend>
+	{hint && <p id={hintId} class="mt-1 text-sm text-dark-grey">{hint}</p>}
+	<div class="mt-3 grid gap-3 sm:grid-cols-2">
+		{options.map((option, i) => (
+			<label
+				for={`${id}-${i}`}
+				class="flex cursor-pointer items-center gap-3 rounded-xl border border-navy/20 bg-white px-4 py-3 text-dark-grey transition-colors hover:border-teal has-checked:border-teal has-checked:bg-teal-pale has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-teal"
+			>
+				<input id={`${id}-${i}`} type={type} name={inputName} value={option.value} required={type === 'radio'} class="size-5 shrink-0 accent-teal" />
+				<span>{option.label}</span>
+			</label>
+		))}
+	</div>
+	<p id={`${id}-error`} class="mt-2 hidden text-sm font-medium text-red-700" data-error-for={name}></p>
+</fieldset>
