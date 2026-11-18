@@ -1,8 +1,7 @@
 ---
-import { site } from '../data/site';
 import Button from './Button.astro';
+import ContactList from './ContactList.astro';
 import Container from './Container.astro';
-import Icon from './icons/Icon.astro';
 import SectionHeading from './SectionHeading.astro';
 
 interface Props {
@@ -14,19 +13,15 @@ interface Props {
 }
 
 const { id = 'contact-heading', title, intro, note, action } = Astro.props;
-const linkClasses = 'font-medium text-navy underline-offset-4 transition-colors hover:text-teal hover:underline';
 ---
 
 <section class="py-12 lg:py-20" aria-labelledby={id}>
 	<Container>
 		<SectionHeading id={id}>{title}</SectionHeading>
 		{intro && <p class="mt-6 text-center text-lg text-dark-grey">{intro}</p>}
-		<ul class="mx-auto mt-10 grid w-fit gap-x-16 gap-y-5 sm:grid-cols-2 xl:flex xl:w-auto xl:justify-center xl:gap-0 xl:divide-x xl:divide-navy/15">
-			<li class="flex items-center gap-3 whitespace-nowrap xl:px-8"><Icon name="user" class="size-6 shrink-0 text-teal" /><span class="font-medium text-navy">{site.contactPerson}</span></li>
-			<li class="flex items-center gap-3 whitespace-nowrap xl:px-8"><Icon name="mail" class="size-6 shrink-0 text-teal" /><a href={`mailto:${site.email}`} class={linkClasses}><span class="sr-only">Email: </span>{site.email}</a></li>
-			<li class="flex items-center gap-3 whitespace-nowrap xl:px-8"><Icon name="phone" class="size-6 shrink-0 text-teal" /><a href={site.phoneHref} class={linkClasses}><span class="sr-only">Telephone: </span>{site.phone}</a></li>
-			<li class="flex items-center gap-3 whitespace-nowrap xl:px-8"><Icon name="globe" class="size-6 shrink-0 text-teal" /><a href={site.url} class={linkClasses}><span class="sr-only">Website: </span>{site.website}</a></li>
-		</ul>
+		<div class="mt-10">
+			<ContactList />
+		</div>
 		{action && <div class="mt-10 text-center"><Button href={action.href} variant="teal">{action.label}</Button></div>}
 		{note && <p class="mt-8 text-center text-sm text-dark-grey italic">{note}</p>}
 	</Container>

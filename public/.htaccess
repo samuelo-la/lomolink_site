@@ -9,7 +9,7 @@ RewriteRule ^ https://lomolinkconsulting.com%{REQUEST_URI} [R=301,L]
 
 ErrorDocument 404 /404.html
 
-<FilesMatch "(^\.|\.map$|contact\.config\.php$)">
+<FilesMatch "(^\.|\.map$|^contact\.config(\.example)?\.php$)">
 	Require all denied
 </FilesMatch>
 
@@ -20,18 +20,19 @@ ErrorDocument 404 /404.html
 	Header always set X-Frame-Options "DENY"
 	Header always set Referrer-Policy "strict-origin-when-cross-origin"
 	Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+	# Short while testing. Raise to "max-age=31536000" once HTTPS is confirmed working
+	# (add includeSubDomains only if every subdomain has a valid certificate).
 	Header always set Strict-Transport-Security "max-age=300"
 </IfModule>
 
-<IfModule mod_expires.c>
-	ExpiresActive On
-	<FilesMatch "\.(css|js|woff2)$">
-		Header set Cache-Control "public, max-age=31536000, immutable"
-	</FilesMatch>
-	<FilesMatch "\.(webp|svg|png|jpg)$">
-		Header set Cache-Control "public, max-age=2592000"
-	</FilesMatch>
-	<FilesMatch "\.html$">
-		Header set Cache-Control "no-cache"
-	</FilesMatch>
+# Caching, matched on the request address so contact.php keeps its own no-store header.
+# - /_astro/ files have content hashes in their names, so they can be cached for a year.
+# - Pages (addresses ending in / or .html) are revalidated on every visit so updates show at once.
+<IfModule mod_setenvif.c>
+	SetEnvIf Request_URI "^/_astro/" ASTRO_ASSET
+	SetEnvIf Request_URI "(/|\.html)$" HTML_PAGE
+</IfModule>
+<IfModule mod_headers.c>
+	Header set Cache-Control "public, max-age=31536000, immutable" env=ASTRO_ASSET
+	Header set Cache-Control "no-cache" env=HTML_PAGE
 </IfModule>

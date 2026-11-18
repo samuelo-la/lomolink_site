@@ -1,0 +1,21 @@
+---
+import Button from '../components/Button.astro';
+import Container from '../components/Container.astro';
+import { routes } from '../data/routes';
+import { site } from '../data/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title={`Thank you | ${site.name}`} description="Thank you for contacting Lomolink Consulting." noindex>
+	<section class="py-12 lg:py-20">
+		<Container class="mx-auto max-w-2xl text-center">
+			<h1 class="font-display text-[clamp(2.25rem,3.6vw,3rem)] leading-tight font-semibold text-navy">Thank you for your message</h1>
+			<span class="mx-auto mt-4 block h-[3px] w-12 bg-gold" aria-hidden="true"></span>
+			<p class="mt-6 text-lg leading-relaxed text-dark-grey">We have received your enquiry and will reply by email.</p>
+			<div class="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
+				<Button href={routes.home} variant="teal">Back to the homepage</Button>
+				<Button href={routes.educationTraining} variant="teal">Explore education and training</Button>
+			</div>
+		</Container>
+	</section>
+</BaseLayout>

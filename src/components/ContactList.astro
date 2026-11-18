@@ -1,0 +1,24 @@
+---
+import { site } from '../data/site';
+import Icon from './icons/Icon.astro';
+
+interface Props {
+	/** row: centred strip (contact sections). stack: one item per line (contact page). */
+	layout?: 'row' | 'stack';
+}
+
+const { layout = 'row' } = Astro.props;
+const linkClasses = 'font-medium text-navy underline-offset-4 transition-colors hover:text-teal hover:underline';
+const listClasses =
+	layout === 'row'
+		? 'mx-auto grid w-fit gap-x-16 gap-y-5 sm:grid-cols-2 xl:flex xl:w-auto xl:justify-center xl:gap-0 xl:divide-x xl:divide-navy/15'
+		: 'space-y-5';
+const itemClasses = layout === 'row' ? 'flex items-center gap-3 whitespace-nowrap xl:px-8' : 'flex items-center gap-3';
+---
+
+<ul class={listClasses}>
+	<li class={itemClasses}><Icon name="user" class="size-6 shrink-0 text-teal" /><span class="font-medium text-navy">{site.contactPerson}</span></li>
+	<li class={itemClasses}><Icon name="mail" class="size-6 shrink-0 text-teal" /><a href={`mailto:${site.email}`} class:list={[linkClasses, 'break-all']}><span class="sr-only">Email: </span>{site.email}</a></li>
+	<li class={itemClasses}><Icon name="phone" class="size-6 shrink-0 text-teal" /><a href={site.phoneHref} class={linkClasses}><span class="sr-only">Telephone: </span>{site.phone}</a></li>
+	<li class={itemClasses}><Icon name="globe" class="size-6 shrink-0 text-teal" /><a href={site.url} class={linkClasses}><span class="sr-only">Website: </span>{site.website}</a></li>
+</ul>

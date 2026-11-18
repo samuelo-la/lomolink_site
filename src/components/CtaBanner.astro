@@ -6,17 +6,20 @@ interface Props {
 	id: string;
 	title: string;
 	text: string;
+	/** Optional second paragraph under the main line. */
+	detail?: string;
 	action: { label: string; href: string };
 	note?: string;
 }
 
-const { id, title, text, action, note } = Astro.props;
+const { id, title, text, detail, action, note } = Astro.props;
 ---
 
 <section class="bg-navy py-12 text-white lg:py-20" aria-labelledby={id} data-dark>
 	<Container class="text-center">
 		<h2 id={id} class="font-display text-[28px] leading-tight font-semibold text-balance lg:text-4xl">{title}</h2>
 		<p class="mx-auto mt-4 max-w-2xl text-lg text-white/90">{text}</p>
+		{detail && <p class="mx-auto mt-3 max-w-3xl leading-relaxed text-white/80">{detail}</p>}
 		<Button href={action.href} variant="gold" class="mt-8">{action.label}</Button>
 		{note && <p class="mt-4 text-sm text-white/80 italic">{note}</p>}
 	</Container>

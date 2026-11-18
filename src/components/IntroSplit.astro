@@ -8,9 +8,11 @@ interface Props {
 	title: string;
 	action?: { label: string; href: string };
 	background?: 'white' | 'cream';
+	/** Use 'start' when the text runs to several paragraphs, so the heading stays beside its first line. */
+	align?: 'center' | 'start';
 }
 
-const { id, title, action, background = 'white' } = Astro.props;
+const { id, title, action, background = 'white', align = 'center' } = Astro.props;
 // With an action, the button sits under the text until there is room for a third column at xl.
 const columns = action
 	? 'lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] xl:grid-cols-[minmax(0,4fr)_minmax(0,6fr)_auto]'
@@ -18,7 +20,7 @@ const columns = action
 ---
 
 <section class:list={['py-12 lg:py-20', background === 'cream' ? 'bg-cream' : 'bg-white']} aria-labelledby={id}>
-	<Container class={`grid gap-6 lg:items-center lg:gap-12 ${columns}`}>
+	<Container class={`grid gap-6 lg:gap-12 ${align === 'start' ? 'lg:items-start' : 'lg:items-center'} ${columns}`}>
 		<SectionHeading id={id} align="left">{title}</SectionHeading>
 		<div class="space-y-3 text-lg leading-relaxed text-dark-grey lg:border-l lg:border-teal/40 lg:pl-12">
 			<slot />

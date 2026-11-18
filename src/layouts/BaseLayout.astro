@@ -33,10 +33,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 		<link rel="icon" href="/favicon.ico" />
 		<script src="../scripts/main.js"></script>
 	</head>
-	<body class="min-h-screen">
+	<body class="flex min-h-screen flex-col">
 		<a href="#content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-white focus:px-4 focus:py-3 focus:text-navy">Skip to content</a>
 		<Navbar />
-		<main id="content"><slot /></main>
+		<main id="content" class="flex-1"><slot /></main>
 		<Footer />
 	</body>
 </html>

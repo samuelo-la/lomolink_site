@@ -1,0 +1,34 @@
+---
+import Button from './Button.astro';
+import Icon from './icons/Icon.astro';
+import type { IconName } from './icons/paths';
+
+interface Props {
+	icon: IconName;
+	title: string;
+	intro: string;
+	points: string[];
+	action: { label: string; href: string };
+}
+
+const { icon, title, intro, points, action } = Astro.props;
+---
+
+<article class="flex h-full flex-col rounded-xl border border-navy/10 bg-white p-6 shadow-card sm:p-8">
+	<div class="flex gap-4 sm:gap-6">
+		<Icon name={icon} class="size-12 shrink-0 text-teal sm:size-14" />
+		<span class="w-px shrink-0 self-stretch bg-teal/40" aria-hidden="true"></span>
+		<div>
+			<h3 class="font-display text-2xl leading-snug font-semibold text-navy lg:text-[28px]">{title}</h3>
+			<p class="mt-2 leading-relaxed text-dark-grey">{intro}</p>
+		</div>
+	</div>
+	<ul class="mt-6 space-y-3">
+		{points.map((point) => (
+			<li class="flex gap-3 text-dark-grey"><span class="mt-2 size-2 shrink-0 rounded-full bg-teal" aria-hidden="true"></span>{point}</li>
+		))}
+	</ul>
+	<div class="mt-auto pt-8 text-center">
+		<Button href={action.href} variant="teal">{action.label}</Button>
+	</div>
+</article>

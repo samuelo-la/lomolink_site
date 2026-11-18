@@ -4,26 +4,43 @@ interface Props {
 	label: string;
 	/** Homepage: gold circles joined by a drawn line. Inner pages: teal circles separated by vertical dividers. */
 	tone?: 'gold' | 'teal';
+	/** Optional paragraph under each step (same order as steps). Shown as columns. */
+	descriptions?: string[];
 }
 
-const { steps, label, tone = 'gold' } = Astro.props;
+const { steps, label, tone = 'gold', descriptions } = Astro.props;
 const isGold = tone === 'gold';
 const circleClasses = isGold ? 'bg-gold text-navy' : 'bg-teal text-white';
+const circle = 'flex size-10 shrink-0 items-center justify-center rounded-full text-lg font-semibold';
 ---
 
-<ol class="mx-auto flex w-fit flex-col gap-6 lg:w-full lg:flex-row lg:items-center lg:gap-0" aria-label={label}>
-	{steps.map((step, i) => (
-		<li
-			class:list={[
-				'flex items-center gap-4',
-				isGold ? 'lg:flex-1 lg:last:flex-none' : 'lg:flex-1 lg:justify-center lg:border-l lg:border-navy/15 lg:px-6 lg:first:border-l-0',
-			]}
-			data-reveal
-			data-reveal-delay={String(i)}
-		>
-			<span class:list={['flex size-10 shrink-0 items-center justify-center rounded-full text-lg font-semibold', circleClasses]} aria-hidden="true">{i + 1}</span>
-			<span class:list={['font-semibold text-navy', isGold ? 'xl:whitespace-nowrap' : 'lg:max-w-44']}><span class="sr-only">Step {i + 1}: </span>{step}</span>
-			{isGold && i < steps.length - 1 && <span class="mx-3 hidden h-px min-w-6 flex-1 bg-teal/40 lg:block xl:mx-4" data-reveal="line" data-reveal-delay={String(i + 1)} aria-hidden="true"></span>}
-		</li>
-	))}
-</ol>
+{descriptions ? (
+	<ol class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0" aria-label={label}>
+		{steps.map((step, i) => (
+			<li class="lg:border-l lg:border-navy/15 lg:px-6 lg:first:border-l-0 lg:first:pl-0 lg:last:pr-0" data-reveal data-reveal-delay={String(i)}>
+				<div class="flex items-center gap-4">
+					<span class:list={[circle, circleClasses]} aria-hidden="true">{i + 1}</span>
+					<h3 class="font-display text-xl leading-snug font-semibold text-navy"><span class="sr-only">Step {i + 1}: </span>{step}</h3>
+				</div>
+				<p class="mt-3 leading-relaxed text-dark-grey">{descriptions[i]}</p>
+			</li>
+		))}
+	</ol>
+) : (
+	<ol class="mx-auto flex w-fit flex-col gap-6 lg:w-full lg:flex-row lg:items-center lg:gap-0" aria-label={label}>
+		{steps.map((step, i) => (
+			<li
+				class:list={[
+					'flex items-center gap-4',
+					isGold ? 'lg:flex-1 lg:last:flex-none' : 'lg:flex-1 lg:justify-center lg:border-l lg:border-navy/15 lg:px-6 lg:first:border-l-0',
+				]}
+				data-reveal
+				data-reveal-delay={String(i)}
+			>
+				<span class:list={[circle, circleClasses]} aria-hidden="true">{i + 1}</span>
+				<span class:list={['font-semibold text-navy', isGold ? 'xl:whitespace-nowrap' : 'lg:max-w-44']}><span class="sr-only">Step {i + 1}: </span>{step}</span>
+				{isGold && i < steps.length - 1 && <span class="mx-3 hidden h-px min-w-6 flex-1 bg-teal/40 lg:block xl:mx-4" data-reveal="line" data-reveal-delay={String(i + 1)} aria-hidden="true"></span>}
+			</li>
+		))}
+	</ol>
+)}

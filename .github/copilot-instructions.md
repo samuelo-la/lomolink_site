@@ -138,7 +138,7 @@ Front end on `/contact/`:
 
 Back end in `public/contact.php` (PHP 8.1+, `declare(strict_types=1)`):
 - Accept POST only, otherwise return 405.
-- Settings come from `contact.config.php` on the server (site host, recipient, sender address, rate-limit secret). Only `contact.config.example.php` with placeholder values is committed. `contact.config.php` is git-ignored and blocked from direct web access in `.htaccess`.
+- Settings come from `contact.config.php` on the server (site host, recipient, sender address, rate-limit secret). Only `contact.config.example.php` with placeholder values is committed (exception, owner decision: its `recipient` is the public contact address `peter@lomolinkconsulting.com`, which also appears on every page; the rate-limit secret stays a placeholder). `contact.config.php` is git-ignored and blocked from direct web access in `.htaccess`.
 - Check that the `Origin` or `Referer` host matches the site host.
 - Validate: name required, max 100; email required, valid, max 150; message required, 10 to 2000 characters. Trim all values and strip control characters.
 - Honeypot field named `website`. If it is filled, pretend success and send nothing.
@@ -238,12 +238,12 @@ Every item is required.
 
 The old Laravel project is reference only. Tick each step when it is done and tested.
 
-- [ ] 1. Project setup: Astro, Tailwind, fonts, tokens, `BaseLayout`, `Container`, `Button`, `SectionHeading`, `Navbar`, `Footer`, `main.js`, `site.ts`, `.htaccess`, `check-dist.mjs`, `.gitignore`, `.npmrc`, 404 page. Done except: `.htaccess` long cache must be limited to `/_astro/` (currently all css/js/woff2, and inside `mod_expires`); README is still the Astro starter. Canonical host is `https://lomolinkconsulting.com` (no www); `.htaccess` redirects HTTP and www there.
-- [x] 2. Homepage sections as components, fully responsive (checked at 390, 768, 1024, 1440, 1920). Owner-supplied photos in `src/assets/images/` (hero and refugee section).
-- [ ] 3. Scroll animations and hover states with reduced-motion support. Done for homepage components (reveal, stagger, steps line, hero keyframes, card lift); apply to other pages as they are built.
-- [x] 4. `courses.json` and the Education & Training page with course-area cards and same-page details sections (checked at 390, 768, 1024, 1440, 1920). Hero photo is a placeholder until supplied.
-- [ ] 5. Contact page, `contact.php`, example config, thank-you page, form upgrade in `main.js`
-- [ ] 6. Remaining pages: About, Refugee Support, Recruitment, Privacy Notice
+- [x] 1. Project setup, including `.htaccess` (long cache only for `/_astro/`, pages revalidated, matched by request address so `contact.php` keeps `no-store`), project README and a site favicon. Canonical host is `https://lomolinkconsulting.com` (no www); `.htaccess` redirects HTTP and www there.
+- [x] 2. Homepage sections as components, fully responsive (checked at 390, 768, 1024, 1440, 1920). Owner-supplied photos in `src/assets/images/`.
+- [x] 3. Scroll animations and hover states with reduced-motion support, used by the shared components on every page (reveal, stagger, steps line, hero keyframes, card lift only on linked cards). Checked with reduced motion emulated.
+- [x] 4. `courses.json` and the Education & Training page with course-area cards and same-page details sections (checked at 390, 768, 1024, 1440, 1920). Owner-supplied hero and section photos.
+- [x] 5. Contact page, `contact.php`, example config, thank-you page, form upgrade in `main.js`. Front end tested in the browser (prefill, validation, ARIA, no-JS error box). `contact.php` tested on PHP 8.1 with a local SMTP sink: 43 checks (method, origin, honeypot, validation, header injection, line length, JSON/redirect responses, rate limit, hashed records, missing config, generic-only logs) plus an end-to-end browser send. Still to verify on the live host: real mail delivery and SPF/DKIM/DMARC. Error colours use Tailwind's built-in red-700/red-50/red-800 (no project token exists for errors).
+- [x] 6. Remaining pages: About, Refugee Support (owner's copy brief text in the mockup layout), Recruitment, Privacy Notice. All checked at the five widths. Privacy Notice shows a visible draft note until the owner reviews it and sets `reviewed = true` in `src/pages/privacy.astro`.
 - [ ] 7. SEO, sitemap, robots, accessibility pass, performance pass
 - [ ] 8. Security review against the Security section, `npm audit`, `npm run check`, final review
 

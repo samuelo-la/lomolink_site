@@ -1,0 +1,77 @@
+---
+// OWNER REVIEW NEEDED: this notice is a plain-language draft, not legal advice.
+// Lomolink Consulting must check it (especially mailbox retention and hosting logs) before launch,
+// then set `reviewed` to true to remove the draft notice from the page.
+const reviewed = true;
+const lastUpdated = '18 November 2026';
+
+import Container from '../components/Container.astro';
+import { routes } from '../data/routes';
+import { site } from '../data/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const h2 = 'mt-12 font-display text-2xl font-semibold text-navy lg:text-[28px]';
+const link = 'font-semibold text-teal underline underline-offset-4 hover:text-navy';
+---
+
+<BaseLayout title={`Privacy Notice | ${site.name}`} description="How Lomolink Consulting handles the information you send through the contact form on this website.">
+	<section class="bg-navy py-12 text-white lg:py-16" data-dark>
+		<Container>
+			<p class="text-sm font-semibold tracking-[0.16em] text-gold uppercase">Your information</p>
+			<h1 class="mt-4 font-display text-[clamp(2.25rem,3.6vw,3rem)] leading-tight font-semibold">Privacy Notice</h1>
+			<p class="mt-4 text-white/80">Last updated: {lastUpdated}</p>
+		</Container>
+	</section>
+
+	<section class="py-12 lg:py-20">
+		<Container>
+			<div class="max-w-3xl text-lg leading-relaxed text-dark-grey">
+				{!reviewed && (
+					<p class="mb-10 rounded-xl border border-gold bg-cream p-5 text-base">
+						<strong class="text-navy">Draft:</strong> this notice is awaiting review by {site.name} and may change before it is finalised.
+					</p>
+				)}
+
+				<p>This notice explains what information we collect through this website, why we collect it and what we do with it. We have written it in plain language. If anything is unclear, please contact us.</p>
+
+				<h2 class={h2}>Who we are</h2>
+				<p class="mt-4">This website is run by {site.name}. You can contact us about this notice or your information:</p>
+				<ul class="mt-4 space-y-2">
+					<li>Contact: {site.contactPerson}</li>
+					<li>Email: <a href={`mailto:${site.email}`} class={link}>{site.email}</a></li>
+					<li>Telephone: <a href={site.phoneHref} class={link}>{site.phone}</a></li>
+				</ul>
+
+				<h2 class={h2}>What we collect</h2>
+				<p class="mt-4">The only personal information this website collects is what you choose to send us through the <a href={routes.contact} class={link}>contact form</a>:</p>
+				<ul class="mt-4 list-disc space-y-2 pl-6 marker:text-gold">
+					<li>your name</li>
+					<li>your email address</li>
+					<li>your message</li>
+				</ul>
+				<p class="mt-4">Please do not include sensitive details in your message that we do not need to answer your enquiry. If you are contacting us on behalf of someone else, please make sure they have agreed before you share their information.</p>
+
+				<h2 class={h2}>How we use it</h2>
+				<p class="mt-4">We use your name, email address and message only to read and reply to your enquiry. We do not sell your information and we do not share it with anyone for marketing.</p>
+
+				<h2 class={h2}>Where it goes and how long we keep it</h2>
+				<p class="mt-4">When you send the form, your message is emailed straight to our company mailbox. The website itself does not save your name, email address or message.</p>
+				<p class="mt-4">Messages in our mailbox are kept in line with our own email retention practices and deleted when they are no longer needed to deal with your enquiry.</p>
+
+				<h2 class={h2}>Protecting the form from spam</h2>
+				<p class="mt-4">To stop the form being misused, the website keeps a short-lived record that counts how many messages have been sent from the same internet connection. This record does not contain your IP address itself, only a scrambled code (a keyed hash) made from it, and it does not contain anything you wrote. Records older than one hour are no longer used and are deleted automatically.</p>
+
+				<h2 class={h2}>Cookies and tracking</h2>
+				<p class="mt-4">This website does not set cookies. It does not use analytics, advertising or tracking tools, and it does not load content from other websites.</p>
+				<p class="mt-4">Like most websites, our hosting provider may keep standard technical logs (such as IP addresses and the pages requested) to run and protect its servers.</p>
+
+				<h2 class={h2}>Your rights</h2>
+				<p class="mt-4">You can ask us for a copy of the information we hold about you, ask us to correct it, or ask us to delete it. To do this, email <a href={`mailto:${site.email}`} class={link}>{site.email}</a>. We will respond as soon as we can.</p>
+				<p class="mt-4">If you are unhappy with how we have handled your information, please contact us first so we can try to help. You also have the right to complain to the Information Commissioner’s Office (ICO), the UK data protection regulator, at <a href="https://ico.org.uk" class={link}>ico.org.uk</a>.</p>
+
+				<h2 class={h2}>Changes to this notice</h2>
+				<p class="mt-4">We may update this notice from time to time. The date at the top shows when it was last changed.</p>
+			</div>
+		</Container>
+	</section>
+</BaseLayout>

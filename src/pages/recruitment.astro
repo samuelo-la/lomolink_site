@@ -1,0 +1,111 @@
+---
+import ContactSection from '../components/ContactSection.astro';
+import Container from '../components/Container.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import Hero from '../components/Hero.astro';
+import IconCard from '../components/IconCard.astro';
+import ListCard from '../components/ListCard.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import SplitFeature from '../components/SplitFeature.astro';
+import Steps from '../components/Steps.astro';
+import type { IconName } from '../components/icons/paths';
+import { enquiryHref, routes } from '../data/routes';
+import { site } from '../data/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import heroImage from '../assets/images/Healthcare Recruitment page.png';
+import prepareImage from '../assets/images/Healthcare Recruitment candidate preparation section.png';
+
+const roles: { icon: IconName; title: string }[] = [
+	{ icon: 'users', title: 'Care assistants and support workers' },
+	{ icon: 'hierarchy', title: 'Senior care and supervisory roles' },
+	{ icon: 'house', title: 'Care homes and community services' },
+];
+
+const steps = ['Tell us what you need', 'Review experience and requirements', 'Discuss suitable next steps', 'Coordinate applications or introductions'];
+---
+
+<BaseLayout
+	title={`Healthcare Recruitment | ${site.name}`}
+	description="Practical recruitment support for healthcare candidates and employers, shaped around experience, role requirements and organisational needs."
+>
+	<Hero
+		eyebrow="Healthcare recruitment"
+		titleLines={['Connecting people', 'with care opportunities.']}
+		text="Practical recruitment support for healthcare candidates and employers, shaped around experience, role requirements and organisational needs."
+		primary={{ label: 'Register your interest', href: enquiryHref('candidate') }}
+		secondary={{ label: 'Discuss staffing needs', href: enquiryHref('employer') }}
+		image={heroImage}
+		imageAlt="Three care workers in uniform chatting and smiling together in a bright care home lounge."
+		imagePosition="object-[50%_35%]"
+	/>
+
+	<section class="py-12 lg:py-20" aria-labelledby="support-heading">
+		<Container>
+			<SectionHeading id="support-heading">Support for candidates and employers</SectionHeading>
+			<div class="mt-10 grid gap-6 lg:grid-cols-2">
+				<div data-reveal>
+					<ListCard
+						icon="users"
+						title="For candidates"
+						intro="Tell us about your experience, qualifications and the roles you are seeking."
+						points={['Discuss your skills and preferences', 'Prepare your CV and application', 'Get ready for interviews', 'Understand role requirements and next steps']}
+						action={{ label: 'Make a candidate enquiry', href: enquiryHref('candidate') }}
+					/>
+				</div>
+				<div data-reveal data-reveal-delay="1">
+					<ListCard
+						icon="building"
+						title="For employers"
+						intro="Speak to us about your vacancies and the people your service needs."
+						points={['Discuss your staffing requirements', 'Identify relevant candidate experience', 'Coordinate introductions and interviews', 'Clarify recruitment and onboarding steps']}
+						action={{ label: 'Make an employer enquiry', href: enquiryHref('employer') }}
+					/>
+				</div>
+			</div>
+		</Container>
+	</section>
+
+	<section class="pb-12 lg:pb-20" aria-labelledby="roles-heading">
+		<Container>
+			<SectionHeading id="roles-heading">Roles and settings</SectionHeading>
+			<ul class="mx-auto mt-10 grid max-w-xl gap-6 xl:max-w-none xl:grid-cols-3">
+				{roles.map((role, i) => (
+					<li data-reveal data-reveal-delay={String(i)}>
+						<IconCard {...role} />
+					</li>
+				))}
+			</ul>
+			<p class="mt-8 text-center text-dark-grey">
+				<a href={routes.contact} class="font-semibold text-teal underline-offset-4 hover:text-navy hover:underline">Contact us</a> to discuss current vacancies and the roles we can support.
+			</p>
+		</Container>
+	</section>
+
+	<SplitFeature
+		id="prepare-heading"
+		title="Prepare for your next opportunity"
+		action={{ label: 'Explore education and training', href: routes.educationTraining }}
+		image={prepareImage}
+		imageAlt="A recruitment adviser reviews a document with a candidate at a table beside a laptop."
+	>
+		<p>We help candidates understand what employers are looking for and identify relevant training or qualifications where appropriate.</p>
+	</SplitFeature>
+
+	<section class="py-12 lg:py-20" aria-labelledby="starts-heading">
+		<Container>
+			<SectionHeading id="starts-heading">How recruitment starts</SectionHeading>
+			<div class="mt-10">
+				<Steps steps={steps} tone="teal" label="How recruitment starts" />
+			</div>
+		</Container>
+	</section>
+
+	<CtaBanner
+		id="looking-heading"
+		title="Looking for staff or your next role?"
+		text={`Start a conversation with ${site.name}.`}
+		action={{ label: 'Contact our recruitment team', href: routes.contact }}
+	/>
+
+	<ContactSection title="Let’s discuss your recruitment needs" note="Opportunities depend on vacancy availability, employer selection and required employment checks." />
+</BaseLayout>
