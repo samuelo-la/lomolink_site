@@ -4,7 +4,8 @@ export const routes = {
 	home: '/',
 	about: '/about/',
 	educationTraining: '/education-training/',
-	studyOption: (slug: string) => `/study-options/${slug}/`,
+	/** Each course area has a details section on the Education & Training page. */
+	courseArea: (slug: string) => `/education-training/#${slug}`,
 	refugeeSupport: '/refugee-support/',
 	recruitment: '/recruitment/',
 	contact: '/contact/',

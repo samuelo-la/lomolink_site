@@ -59,7 +59,7 @@ const steps = ['Tell us your goals', 'Explore your options', 'Plan your next ste
 			<ul class="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
 				{courses.map((course, i) => (
 					<li data-reveal data-reveal-delay={String(i % 3)}>
-						<CourseTile icon={course.icon} title={course.title} href={routes.studyOption(course.slug)} />
+						<CourseTile icon={course.icon} title={course.title} href={routes.courseArea(course.slug)} />
 					</li>
 				))}
 			</ul>

@@ -1,20 +1,29 @@
 ---
 interface Props {
 	steps: string[];
-	tone?: 'gold' | 'teal';
 	label: string;
+	/** Homepage: gold circles joined by a drawn line. Inner pages: teal circles separated by vertical dividers. */
+	tone?: 'gold' | 'teal';
 }
 
-const { steps, tone = 'gold', label } = Astro.props;
-const circleClasses = tone === 'gold' ? 'bg-gold text-navy' : 'bg-teal text-white';
+const { steps, label, tone = 'gold' } = Astro.props;
+const isGold = tone === 'gold';
+const circleClasses = isGold ? 'bg-gold text-navy' : 'bg-teal text-white';
 ---
 
 <ol class="mx-auto flex w-fit flex-col gap-6 lg:w-full lg:flex-row lg:items-center lg:gap-0" aria-label={label}>
 	{steps.map((step, i) => (
-		<li class="flex items-center gap-4 lg:flex-1 lg:last:flex-none" data-reveal data-reveal-delay={String(i)}>
+		<li
+			class:list={[
+				'flex items-center gap-4',
+				isGold ? 'lg:flex-1 lg:last:flex-none' : 'lg:flex-1 lg:justify-center lg:border-l lg:border-navy/15 lg:px-6 lg:first:border-l-0',
+			]}
+			data-reveal
+			data-reveal-delay={String(i)}
+		>
 			<span class:list={['flex size-10 shrink-0 items-center justify-center rounded-full text-lg font-semibold', circleClasses]} aria-hidden="true">{i + 1}</span>
-			<span class="font-semibold text-navy xl:whitespace-nowrap"><span class="sr-only">Step {i + 1}: </span>{step}</span>
-			{i < steps.length - 1 && <span class="mx-3 hidden h-px min-w-6 flex-1 bg-teal/40 lg:block xl:mx-4" data-reveal="line" data-reveal-delay={String(i + 1)} aria-hidden="true"></span>}
+			<span class:list={['font-semibold text-navy', isGold ? 'xl:whitespace-nowrap' : 'lg:max-w-44']}><span class="sr-only">Step {i + 1}: </span>{step}</span>
+			{isGold && i < steps.length - 1 && <span class="mx-3 hidden h-px min-w-6 flex-1 bg-teal/40 lg:block xl:mx-4" data-reveal="line" data-reveal-delay={String(i + 1)} aria-hidden="true"></span>}
 		</li>
 	))}
 </ol>

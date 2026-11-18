@@ -1,0 +1,92 @@
+---
+import ContactSection from '../components/ContactSection.astro';
+import Container from '../components/Container.astro';
+import CourseAreaCard from '../components/CourseAreaCard.astro';
+import CourseDetail from '../components/CourseDetail.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import Hero from '../components/Hero.astro';
+import IntroSplit from '../components/IntroSplit.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Steps from '../components/Steps.astro';
+import { courses } from '../data/courses';
+import { enquiryHref, routes } from '../data/routes';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import heroImage from '../assets/images/Education and Training banner page.png';
+import practicalImage from '../assets/images/Education and Training practical skills section.png';
+import SplitFeature from '../components/SplitFeature.astro';
+
+const steps = ['Tell us your goals', 'Review suitable courses', 'Check requirements and fees', 'Prepare your application'];
+---
+
+<BaseLayout
+	title="Education and Training | Lomolink Consulting"
+	description="Explore course areas including adult social care, English and maths, digital skills, business, early childhood education and teaching, with personalised guidance on how to apply."
+>
+	<Hero
+		eyebrow="Education and training"
+		titleLines={['Find a course that', 'moves you forward.']}
+		text="Explore qualifications and practical learning opportunities to support your education and career goals."
+		primary={{ label: 'Discuss your study options', href: enquiryHref('consultation') }}
+		image={heroImage}
+		imageAlt="An adviser talks through a course prospectus with two learners at a table in a college library."
+		imagePosition="object-[60%_50%]"
+	/>
+
+	<SplitFeature
+		id="fits-heading"
+		title="Learning that fits your next step"
+		background="white"
+		image={practicalImage}
+		imageAlt="A tutor in a healthcare uniform shows a group of adult learners how to take a blood pressure reading."
+	>
+		<p>Whether you are returning to education, preparing for university or developing workplace skills, we help you explore suitable courses and understand how to apply.</p>
+	</SplitFeature>
+
+	<section id="course-areas" class="pb-12 lg:pb-20" aria-labelledby="areas-heading">
+		<Container>
+			<SectionHeading id="areas-heading">Explore our course areas</SectionHeading>
+			<ul class="mt-10 grid gap-6 lg:grid-cols-2">
+				{courses.map((course, i) => (
+					<li data-reveal data-reveal-delay={String(i % 2)}>
+						<CourseAreaCard icon={course.icon} title={course.title} summary={course.summary} href={`#${course.slug}`} />
+					</li>
+				))}
+			</ul>
+			<p class="mt-8 text-center text-dark-grey">
+				<a href={routes.contact} class="font-semibold text-teal underline-offset-4 hover:text-navy hover:underline">Contact us</a> for current availability, awarding organisations, entry requirements, fees and assessment arrangements.
+			</p>
+		</Container>
+	</section>
+
+	<section class="bg-teal-pale/40 py-12 lg:py-20" aria-labelledby="details-heading">
+		<Container>
+			<SectionHeading id="details-heading">Course area details</SectionHeading>
+			<p class="mx-auto mt-6 max-w-2xl text-center text-lg text-dark-grey">Find out more about each area, including qualifications you can explore with us.</p>
+			<div class="mt-10 grid gap-6 lg:grid-cols-2">
+				{courses.map((course) => <CourseDetail course={course} backHref="#course-areas" />)}
+			</div>
+		</Container>
+	</section>
+
+	<IntroSplit id="returning-heading" title="Returning to education?" background="cream" action={{ label: 'Get personalised guidance', href: enquiryHref('consultation') }}>
+		<p>We welcome learners from all backgrounds, including people with refugee status. Start with a conversation about your qualifications, experience and ambitions.</p>
+	</IntroSplit>
+
+	<section class="py-12 lg:py-20" aria-labelledby="started-heading">
+		<Container>
+			<SectionHeading id="started-heading">How to get started</SectionHeading>
+			<div class="mt-10">
+				<Steps steps={steps} tone="teal" label="How to get started" />
+			</div>
+		</Container>
+	</section>
+
+	<CtaBanner
+		id="unsure-heading"
+		title="Not sure which course is right for you?"
+		text="Let us help you explore your options."
+		action={{ label: 'Book a consultation', href: enquiryHref('consultation') }}
+	/>
+
+	<ContactSection title="Let’s discuss your next step" note="Admission and progression depend on the requirements of the relevant provider or institution." />
+</BaseLayout>

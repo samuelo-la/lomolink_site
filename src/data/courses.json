@@ -1,19 +1,19 @@
 [
 	{
-		"slug": "adult-social-care-healthcare",
-		"title": "Adult Social Care & Healthcare",
+		"slug": "adult-social-care-and-healthcare",
+		"title": "Adult Social Care and Healthcare",
 		"category": "Health and care",
 		"icon": "heart-plus",
-		"summary": "Build knowledge for care work or prepare for further healthcare study.",
+		"summary": "Build practical skills for working in adult social care and healthcare, from supporting people day to day to developing your skills for a senior care role.",
 		"description": "Explore qualifications that introduce the knowledge and values used in adult social care, or prepare you for further study in healthcare. We help you understand what each route involves and whether it suits your experience and goals.",
 		"qualifications": ["Level 2 Adult Social Care Certificate", "Access to HE Diploma in Nursing and Midwifery"]
 	},
 	{
-		"slug": "english-mathematics",
-		"title": "English & Mathematics",
+		"slug": "english-and-mathematics",
+		"title": "English and Mathematics",
 		"category": "Essential skills",
 		"icon": "book-open",
-		"summary": "Develop essential skills for work, study and everyday life.",
+		"summary": "Build confidence in reading, writing and everyday maths. Explore Functional Skills options that can support your next step into work or further study.",
 		"description": "English and mathematics qualifications are often needed for further study and many jobs. We help you find a suitable level and understand how these qualifications fit with your wider plans.",
 		"qualifications": ["Functional Skills English: Levels 1 and 2", "Functional Skills Mathematics: Levels 1 and 2"]
 	},
@@ -22,16 +22,16 @@
 		"title": "Digital Skills",
 		"category": "Essential skills",
 		"icon": "laptop",
-		"summary": "Build confidence using technology for learning, employment and daily tasks.",
+		"summary": "Learn to use email, online services and everyday software with confidence at work, in study and at home.",
 		"description": "Digital skills support learning, job searching and everyday tasks. We help you explore courses that build practical confidence with technology at a pace that suits you.",
 		"qualifications": ["Level 1 Certificate in Digital Skills"]
 	},
 	{
-		"slug": "business-management",
-		"title": "Business & Management",
+		"slug": "business-and-management",
+		"title": "Business and Management",
 		"category": "Professional development",
 		"icon": "chart-growth",
-		"summary": "Develop your understanding of business operations and leadership.",
+		"summary": "Explore courses that develop your skills in business administration, team leadership and management.",
 		"description": "Business and management qualifications can support progression into supervisory and leadership roles. We help you compare levels and understand the entry requirements for each.",
 		"qualifications": ["Business Management Diplomas: Levels 4, 5 and 6"]
 	},
@@ -40,16 +40,16 @@
 		"title": "Early Childhood Education",
 		"category": "Education and care",
 		"icon": "users",
-		"summary": "Explore children's development, learning and early years practice.",
+		"summary": "Explore training for working with young children and learn how to support their development, learning and wellbeing.",
 		"description": "Early childhood education qualifications focus on how young children learn and develop. We help you understand the options and what each level may lead to.",
 		"qualifications": ["Early Childhood Education Diplomas: Levels 4 and 5"]
 	},
 	{
-		"slug": "education-training",
-		"title": "Education & Training",
+		"slug": "education-and-training",
+		"title": "Education and Training",
 		"category": "Education and care",
 		"icon": "books",
-		"summary": "Understand teaching responsibilities, inclusive learning and assessment.",
+		"summary": "Explore courses that help you plan learning sessions, support learners and develop your teaching or training skills.",
 		"description": "If you are interested in teaching or training others, an introductory teaching qualification is a common first step. We help you understand what is involved and how to prepare.",
 		"qualifications": ["Level 3 Award in Education and Training"]
 	}

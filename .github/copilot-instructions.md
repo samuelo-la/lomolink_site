@@ -37,7 +37,7 @@ src/
   components/        Navbar, Footer, Hero, ServiceCard, CourseTile, Steps,
                      CtaBanner, ContactSection, SectionHeading, Button, Container
     icons/           inline SVG icon components
-  pages/             index, about, education-training, study-options/[slug],
+  pages/             index, about, education-training,
                      refugee-support, recruitment, contact, thank-you,
                      privacy, 404
   data/              courses.json, site.ts
@@ -108,7 +108,7 @@ Navy background. Wordmark on the left. Links: Home, About Us, Education & Traini
 8. **Footer.** Quick links, contact details, privacy notice link, copyright line.
 
 ### Other pages
-About Us, Education & Training (the six study areas as cards, no category filter: owner decision, matching the mockup), Study area detail (`/study-options/[slug]`, information only, generated with `getStaticPaths`), Refugee Support, Recruitment, Contact, Thank you (`noindex`), Privacy Notice, 404.
+About Us, Education & Training (the six course areas as cards, no category filter, each linking to its own details section further down the same page at `#<slug>`: owner decision, replacing separate `/study-options/[slug]` pages; homepage tiles link to `/education-training/#<slug>`), Refugee Support, Recruitment, Contact, Thank you (`noindex`), Privacy Notice, 404.
 
 ## Components
 
@@ -151,7 +151,7 @@ Back end in `public/contact.php` (PHP 8.1+, `declare(strict_types=1)`):
 
 - Company details live in `src/data/site.ts`: name (Lomolink Consulting), contact person, email, phone, website, `enquiryUrl`. The owner supplied real values on 17 November 2026. Never hardcode these in components.
 - The domain is `lomolinkconsulting.com` (set as `site` in `astro.config.mjs`).
-- `src/data/courses.json` is an array of study areas. Each has `slug`, `title`, `category`, `icon`, `summary`, `description` and `qualifications` (example qualification names taken from the owner's Education & Training mockup, approved by the owner). Every course page carries a note that availability, entry requirements and fees vary by programme and should be confirmed through an enquiry. Do not list prices, start dates, accreditation or awarding bodies unless supplied.
+- `src/data/courses.json` is an array of course areas. Each has `slug` (also the details-section anchor), `title`, `category`, `icon`, `summary` (owner-supplied card text), `description` and `qualifications` (example qualification names taken from the owner's Education & Training mockup, approved by the owner). Every course details section carries a note that availability, entry requirements and fees vary by programme and should be confirmed through an enquiry. Do not list prices, start dates, accreditation or awarding bodies unless supplied.
 
 ## Content and imagery
 
@@ -241,7 +241,7 @@ The old Laravel project is reference only. Tick each step when it is done and te
 - [ ] 1. Project setup: Astro, Tailwind, fonts, tokens, `BaseLayout`, `Container`, `Button`, `SectionHeading`, `Navbar`, `Footer`, `main.js`, `site.ts`, `.htaccess`, `check-dist.mjs`, `.gitignore`, `.npmrc`, 404 page. Done except: `.htaccess` long cache must be limited to `/_astro/` (currently all css/js/woff2, and inside `mod_expires`); README is still the Astro starter. Canonical host is `https://lomolinkconsulting.com` (no www); `.htaccess` redirects HTTP and www there.
 - [x] 2. Homepage sections as components, fully responsive (checked at 390, 768, 1024, 1440, 1920). Owner-supplied photos in `src/assets/images/` (hero and refugee section).
 - [ ] 3. Scroll animations and hover states with reduced-motion support. Done for homepage components (reveal, stagger, steps line, hero keyframes, card lift); apply to other pages as they are built.
-- [ ] 4. `courses.json`, study options page with category filter, study area detail pages
+- [x] 4. `courses.json` and the Education & Training page with course-area cards and same-page details sections (checked at 390, 768, 1024, 1440, 1920). Hero photo is a placeholder until supplied.
 - [ ] 5. Contact page, `contact.php`, example config, thank-you page, form upgrade in `main.js`
 - [ ] 6. Remaining pages: About, Refugee Support, Recruitment, Privacy Notice
 - [ ] 7. SEO, sitemap, robots, accessibility pass, performance pass
