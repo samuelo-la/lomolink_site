@@ -6,7 +6,13 @@
 		"icon": "heart-plus",
 		"summary": "Build practical skills for working in adult social care and healthcare, from supporting people day to day to developing your skills for a senior care role.",
 		"description": "Explore qualifications that introduce the knowledge and values used in adult social care, or prepare you for further study in healthcare. We help you understand what each route involves and whether it suits your experience and goals.",
-		"qualifications": ["Level 2 Adult Social Care Certificate", "Access to HE Diploma in Nursing and Midwifery"]
+		"qualifications": [
+			"Level 2 Adult Social Care Certificate",
+			"Level 3 Diploma in Adult Care",
+			"Level 4 Diploma in Adult Care",
+			"Level 5 Diploma in Leading and Managing an Adult Care Service",
+			"Access to HE Diploma in Nursing and Midwifery"
+		]
 	},
 	{
 		"slug": "english-and-mathematics",
