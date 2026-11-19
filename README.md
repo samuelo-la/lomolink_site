@@ -56,7 +56,16 @@ Contact form topics: buttons can link to `/contact/?topic=consultation`, `partne
    - Check that `/contact.config.php` and `/form-lib.php` return 403.
 6. Once HTTPS is confirmed working, raise `Strict-Transport-Security` in `public/.htaccess` from `max-age=300` to `max-age=31536000`, rebuild and upload `.htaccess` again.
 
-If the site sits behind a proxy or CDN (for example Cloudflare), tell the developer: the HTTPS redirect and the contact form rate limit both need adjusting to use the forwarded visitor details.
+### Cloudflare
+
+The live domain is proxied through Cloudflare. Required settings:
+
+- `contact.config.php`: `'behind_cloudflare' => true` (otherwise all visitors share one rate limit). Leave it `false` on any domain not behind Cloudflare.
+- SSL/TLS mode **Full (strict)**, with a valid certificate on GO54 (AutoSSL or a Cloudflare Origin Certificate).
+- DNS: website records proxied (orange cloud); mail records (`mail`, MX, SPF, DKIM, DMARC) **DNS only** (grey cloud).
+- Turn **off** features that inject scripts or change pages, which the strict Content Security Policy blocks or which add tracking: Rocket Loader, Email Address Obfuscation, Web Analytics / Real User Monitoring automatic setup, Zaraz.
+- Do not let Cloudflare cache HTML (the default is fine) or override the security headers.
+- Cloudflare's address ranges are listed in `public/form-lib.php` (`FORM_CLOUDFLARE_RANGES`). Check https://www.cloudflare.com/ips/ once a year and update if they change.
 
 ## Security notes
 

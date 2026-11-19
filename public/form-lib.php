@@ -21,6 +21,16 @@ const FORM_WINDOW_SECONDS = 3600;
 const FORM_CV_MAX_BYTES = 5 * 1024 * 1024;
 const FORM_DOCX_MAX_UNCOMPRESSED = 50 * 1024 * 1024;
 
+// Cloudflare's published address ranges (https://www.cloudflare.com/ips/, checked 19 November 2026).
+// Used only when contact.config.php sets 'behind_cloudflare' => true.
+const FORM_CLOUDFLARE_RANGES = [
+	'173.245.48.0/20', '103.21.244.0/22', '103.22.200.0/22', '103.31.4.0/22', '141.101.64.0/18',
+	'108.162.192.0/18', '190.93.240.0/20', '188.114.96.0/20', '197.234.240.0/22', '198.41.128.0/17',
+	'162.158.0.0/15', '104.16.0.0/13', '104.24.0.0/14', '172.64.0.0/13', '131.0.72.0/22',
+	'2400:cb00::/32', '2606:4700::/32', '2803:f800::/32', '2405:b500::/32', '2405:8100::/32',
+	'2a06:98c0::/29', '2c0f:f248::/32',
+];
+
 const FORM_MESSAGES = [
 	'sent' => 'Thank you. Your message has been sent and we will reply by email.',
 	'sent_candidate' => 'Thank you for registering your interest. We will be in touch by email if there is a suitable opportunity.',
@@ -44,7 +54,7 @@ const FORM_CV_ERRORS = [
  * Starts handling a form submission: security headers, POST only, settings, same-site check, honeypot.
  *
  * @param string $formPage The form's page, used for the no-JavaScript error redirect.
- * @return array{json: bool, page: string, config: array<string, string>}
+ * @return array{json: bool, page: string, config: array<string, mixed>}
  */
 function form_begin(string $formPage): array
 {
@@ -72,6 +82,9 @@ function form_begin(string $formPage): array
 			form_fail($form, 500, 'server', 'config_invalid');
 		}
 	}
+	if (isset($config['behind_cloudflare']) && !is_bool($config['behind_cloudflare'])) {
+		form_fail($form, 500, 'server', 'config_invalid');
+	}
 	$form['config'] = $config;
 
 	$source = $_SERVER['HTTP_ORIGIN'] ?? ($_SERVER['HTTP_REFERER'] ?? '');
@@ -94,7 +107,7 @@ function form_begin(string $formPage): array
 }
 
 /**
- * @param array{json: bool, page: string, config: array<string, string>} $form
+ * @param array{json: bool, page: string, config: array<string, mixed>} $form
  * @param array<string, string> $errors
  */
 function form_respond(array $form, int $status, string $messageKey, array $errors = []): never
@@ -121,7 +134,7 @@ function form_respond(array $form, int $status, string $messageKey, array $error
 	exit;
 }
 
-/** @param array{json: bool, page: string, config: array<string, string>} $form */
+/** @param array{json: bool, page: string, config: array<string, mixed>} $form */
 function form_fail(array $form, int $status, string $messageKey, string $logCode): never
 {
 	error_log('form: ' . $logCode);
@@ -190,11 +203,58 @@ function form_choices(string $name, array $allowed, int $minimum): ?array
 	return count($picked) >= $minimum ? array_keys($picked) : null;
 }
 
+/** True when $ip falls inside the CIDR range, for IPv4 and IPv6. */
+function form_ip_in_range(string $ip, string $cidr): bool
+{
+	[$subnet, $bits] = explode('/', $cidr) + [1 => ''];
+	$ipBin = @inet_pton($ip);
+	$subnetBin = @inet_pton($subnet);
+	if ($ipBin === false || $subnetBin === false || strlen($ipBin) !== strlen($subnetBin)) {
+		return false;
+	}
+	$bits = (int) $bits;
+	$whole = intdiv($bits, 8);
+	if (strncmp($ipBin, $subnetBin, $whole) !== 0) {
+		return false;
+	}
+	$rest = $bits % 8;
+	if ($rest === 0) {
+		return true;
+	}
+	$mask = (0xFF << (8 - $rest)) & 0xFF;
+	return (ord($ipBin[$whole]) & $mask) === (ord($subnetBin[$whole]) & $mask);
+}
+
+/**
+ * The visitor's address for rate limiting. Behind Cloudflare every request arrives from a Cloudflare
+ * address, so the real one is read from CF-Connecting-IP, but only when the request really came through
+ * Cloudflare (otherwise anyone could fake the header by contacting the server directly).
+ *
+ * @param array<string, mixed> $config
+ */
+function form_visitor_ip(array $config): string
+{
+	$remote = (string) ($_SERVER['REMOTE_ADDR'] ?? '');
+	if (($config['behind_cloudflare'] ?? false) !== true) {
+		return $remote;
+	}
+	$forwarded = trim((string) ($_SERVER['HTTP_CF_CONNECTING_IP'] ?? ''));
+	if ($forwarded === '' || filter_var($forwarded, FILTER_VALIDATE_IP) === false) {
+		return $remote;
+	}
+	foreach (FORM_CLOUDFLARE_RANGES as $range) {
+		if (form_ip_in_range($remote, $range)) {
+			return $forwarded;
+		}
+	}
+	return $remote;
+}
+
 /**
  * At most FORM_MAX_PER_HOUR submissions per visitor across all forms, counted by a keyed hash of the IP
  * address. Records older than the window are deleted on every submission.
  *
- * @param array{json: bool, page: string, config: array<string, string>} $form
+ * @param array{json: bool, page: string, config: array<string, mixed>} $form
  */
 function form_rate_limit(array $form): void
 {
@@ -203,7 +263,7 @@ function form_rate_limit(array $form): void
 	if (!is_dir($directory) && !@mkdir($directory, 0700, true)) {
 		form_fail($form, 500, 'server', 'ratelimit_dir_unavailable');
 	}
-	$visitorKey = hash_hmac('sha256', (string) ($_SERVER['REMOTE_ADDR'] ?? ''), $config['rate_limit_secret']);
+	$visitorKey = hash_hmac('sha256', form_visitor_ip($config), $config['rate_limit_secret']);
 	$handle = @fopen($directory . '/' . $visitorKey, 'c+');
 	if ($handle === false || !flock($handle, LOCK_EX)) {
 		form_fail($form, 500, 'server', 'ratelimit_unavailable');
@@ -358,7 +418,7 @@ function form_limit_lines(string $text, int $maxBytes = 900): string
  * Sends the submission to the configured mailbox. Visitor input appears only in the body and,
  * once validated, in Reply-To. An attachment (the CV) is added as a fixed file name.
  *
- * @param array{json: bool, page: string, config: array<string, string>} $form
+ * @param array{json: bool, page: string, config: array<string, mixed>} $form
  * @param array{data: string, filename: string, mime: string}|null $attachment
  */
 function form_send(array $form, string $subject, string $body, string $replyTo, ?array $attachment = null): void

@@ -2,10 +2,13 @@ Options -Indexes
 
 RewriteEngine On
 # One canonical address: https://lomolinkconsulting.com (no www).
-# If SSL terminates at a proxy, use X-Forwarded-Proto here instead of HTTPS.
-RewriteCond %{HTTPS} !=on [OR]
+# Works directly and behind Cloudflare. Set Cloudflare SSL/TLS to "Full (strict)"; the X-Forwarded-Proto
+# check also prevents a redirect loop if it is ever left on "Flexible".
 RewriteCond %{HTTP_HOST} ^www\. [NC]
 RewriteRule ^ https://lomolinkconsulting.com%{REQUEST_URI} [R=301,L]
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 ErrorDocument 404 /404.html
 

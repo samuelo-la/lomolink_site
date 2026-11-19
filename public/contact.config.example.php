@@ -25,4 +25,8 @@ return [
 
 	// Writable folder OUTSIDE the public web root for short-lived rate-limit records.
 	'rate_limit_dir' => '/home/ACCOUNT/contact-rate-limit',
+
+	// true when the domain is proxied through Cloudflare (orange cloud), so the rate limit counts real
+	// visitors instead of Cloudflare's servers. Leave false for a domain that is not behind Cloudflare.
+	'behind_cloudflare' => false,
 ];

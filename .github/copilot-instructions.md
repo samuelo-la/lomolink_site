@@ -14,6 +14,7 @@ It is a brochure site with three forms (contact, candidate registration, employe
 - There are exactly three forms, with exactly the fields listed under "Forms" below (owner decision, 18 November 2026, to collect candidate and employer details for recruitment). Do not add forms or fields without being told to. No phone number fields.
 - The only file upload is the optional CV on the candidate form: PDF or .docx, at most 5 MB, checked on the server, attached to the email and never saved.
 - The site stores nothing. Submissions (including CVs) are emailed to the company and not saved anywhere on the server.
+- The live domain is proxied through Cloudflare (owner decision, 19 November 2026). Cloudflare features that inject scripts or tracking (Rocket Loader, Email Address Obfuscation, Web Analytics, Zaraz) stay off. The rate limit uses `CF-Connecting-IP` only when `behind_cloudflare` is true in the server config and the request comes from a published Cloudflare range.
 - No analytics, tracking pixels, chat widgets, embeds or third-party scripts. If analytics is ever added, a cookie consent banner is added with it.
 - Self-host fonts and icons. No CDN links.
 - There is no admin panel. Content changes are made by editing files and uploading a new build.
