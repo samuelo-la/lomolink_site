@@ -70,7 +70,27 @@ function upgradeForm(form) {
 		field.dataset.baseDescribedby = field.getAttribute('aria-describedby') ?? '';
 	});
 
+	// Sections that only apply to one answer (e.g. driving questions for domiciliary care). Hidden sections are
+	// disabled, so they are neither checked nor sent. Without JavaScript they stay visible and optional.
+	const conditionalSections = [...form.querySelectorAll('[data-show-when]')];
+	const updateConditionalSections = () => {
+		conditionalSections.forEach((section) => {
+			const control = form.elements.namedItem(section.dataset.showWhen);
+			const show = Boolean(control) && control.value === section.dataset.showValue;
+			section.hidden = !show;
+			section.querySelectorAll('input, select, textarea').forEach((input) => {
+				input.disabled = !show;
+			});
+			if (!show) section.querySelectorAll('[data-field]').forEach((field) => showError(field, ''));
+		});
+	};
+	conditionalSections.forEach((section) => {
+		form.elements.namedItem(section.dataset.showWhen)?.addEventListener('change', updateConditionalSections);
+	});
+	form.addEventListener('reset', () => setTimeout(updateConditionalSections));
+
 	const isValid = (field) => {
+		if (field.closest('[hidden]')) return true;
 		if (field.tagName === 'FIELDSET') return field.querySelectorAll('input:checked').length >= Number(field.dataset.min || 1);
 		if (field.type === 'checkbox') return !field.required || field.checked;
 		if (field.type === 'file') {
@@ -83,6 +103,14 @@ function upgradeForm(form) {
 		if (field.maxLength > 0 && value.length > field.maxLength) return false;
 		if (field.minLength > 0 && value.length < field.minLength) return false;
 		if (field.type === 'email' && !emailPattern.test(value)) return false;
+		if (field.type === 'date') {
+			const today = new Date();
+			today.setHours(0, 0, 0, 0);
+			const latest = new Date(today);
+			latest.setFullYear(latest.getFullYear() + 2);
+			const chosen = new Date(`${value}T00:00:00`);
+			if (Number.isNaN(chosen.getTime()) || chosen < today || chosen > latest) return false;
+		}
 		if (field.type === 'tel') {
 			const digits = value.replace(/\D/g, '').length;
 			if (!/^\+?[0-9 ().-]+$/.test(value) || digits < 7 || digits > 15) return false;
@@ -115,6 +143,7 @@ function upgradeForm(form) {
 	};
 
 	form.noValidate = true;
+	updateConditionalSections();
 
 	fields.forEach((field) => {
 		const recheck = () => {

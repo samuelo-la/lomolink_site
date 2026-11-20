@@ -15,9 +15,11 @@ interface Props {
 	hint?: string;
 	/** Checkbox groups: minimum number of boxes to tick. */
 	min?: number;
+	/** Radio groups are required by default; set false when the question only applies sometimes. */
+	required?: boolean;
 }
 
-const { form, name, legend, type, options, error, hint, min = 1 } = Astro.props;
+const { form, name, legend, type, options, error, hint, min = 1, required = true } = Astro.props;
 const id = `${form}-${name}`;
 const hintId = hint ? `${id}-hint` : undefined;
 // PHP collects checkbox groups as arrays when the name ends in [].
@@ -33,7 +35,7 @@ const inputName = type === 'checkbox' ? `${name}[]` : name;
 				for={`${id}-${i}`}
 				class="flex cursor-pointer items-center gap-3 rounded-xl border border-navy/20 bg-white px-4 py-3 text-dark-grey transition-colors hover:border-teal has-checked:border-teal has-checked:bg-teal-pale has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-teal"
 			>
-				<input id={`${id}-${i}`} type={type} name={inputName} value={option.value} required={type === 'radio'} class="size-5 shrink-0 accent-teal" />
+				<input id={`${id}-${i}`} type={type} name={inputName} value={option.value} required={type === 'radio' && required} class="size-5 shrink-0 accent-teal" />
 				<span>{option.label}</span>
 			</label>
 		))}

@@ -1,5 +1,6 @@
 ---
-// Candidate registration. Posts to /candidate.php with an optional CV (PDF or .docx, max 5 MB).
+// Candidate registration (owner's "Lomolink Care Recruitment Form" brief, 20 November 2026).
+// Posts to /candidate.php with an optional CV (PDF or .docx, max 5 MB).
 import ChoiceGroup from './forms/ChoiceGroup.astro';
 import FormField from './forms/FormField.astro';
 import FormShell from './forms/FormShell.astro';
@@ -11,12 +12,16 @@ const f = 'candidate';
 	action="/candidate.php"
 	form={f}
 	multipart
-	submitLabel="Register your interest"
+	submitLabel="Register my interest"
 	privacyNote="We use your details to look for suitable roles and share them with employers only with your consent."
 >
-	<FormField form={f} name="name" label="Name" required maxlength={100} autocomplete="name" error="Please enter your name (up to 100 characters)." />
+	<FormField form={f} name="name" label="Full name" required maxlength={100} autocomplete="name" error="Please enter your full name (up to 100 characters)." />
 	<FormField form={f} name="email" label="Email address" type="email" required maxlength={150} autocomplete="email" error="Please enter a valid email address, for example name@example.com." />
 	<FormField form={f} name="phone" label="Phone number" type="tel" maxlength={30} autocomplete="tel" hint="If you would like us to call you." error="Please enter a valid phone number, or leave it blank." />
+
+	<FormField form={f} name="location" label="Town or postcode" required maxlength={100} autocomplete="postal-code" hint="Where you are based. Please do not give your full address." error="Please enter your town or postcode (up to 100 characters)." />
+	<FormField form={f} name="travel" label="Areas you can travel to for work" maxlength={200} hint="For example: within 10 miles, anywhere in South London." error="Please keep this to 200 characters or fewer." />
+
 	<FormField
 		form={f}
 		name="role"
@@ -28,47 +33,100 @@ const f = 'candidate';
 			{ value: 'care-assistant', label: 'Care assistant' },
 			{ value: 'support-worker', label: 'Support worker' },
 			{ value: 'domiciliary-care-worker', label: 'Domiciliary care worker' },
-			{ value: 'other', label: 'Other (tell us below)' },
+			{ value: 'other', label: 'Other' },
+			{ value: 'open', label: 'Open to opportunities' },
 		]}
 	/>
-	<FormField form={f} name="location" label="Town or area" required maxlength={100} autocomplete="address-level2" hint="Where you live or would like to work. Please do not give your full address." error="Please enter your town or area (up to 100 characters)." />
+
+	<!-- Shown only for domiciliary care when JavaScript runs; without it, visible to everyone and optional. -->
+	<div class="space-y-6" data-show-when="role" data-show-value="domiciliary-care-worker">
+		<ChoiceGroup
+			form={f}
+			name="licence"
+			legend="Do you have a full UK driving licence?"
+			type="radio"
+			required={false}
+			hint="Domiciliary care roles usually involve travelling between clients’ homes."
+			error="Please tell us whether you have a full UK driving licence."
+			options={[
+				{ value: 'yes', label: 'Yes' },
+				{ value: 'no', label: 'No' },
+			]}
+		/>
+		<ChoiceGroup
+			form={f}
+			name="car"
+			legend="Do you have access to a car for work?"
+			type="radio"
+			required={false}
+			error="Please tell us whether you have access to a car for work."
+			options={[
+				{ value: 'yes', label: 'Yes' },
+				{ value: 'no', label: 'No' },
+			]}
+		/>
+	</div>
+
 	<ChoiceGroup
 		form={f}
-		name="availability"
-		legend="Availability"
-		type="checkbox"
-		hint="Tick all that apply."
-		error="Please choose at least one option for your availability."
-		options={[
-			{ value: 'weekdays', label: 'Weekdays' },
-			{ value: 'weekends', label: 'Weekends' },
-			{ value: 'days', label: 'Day shifts' },
-			{ value: 'nights', label: 'Night shifts' },
-		]}
-	/>
-	<ChoiceGroup
-		form={f}
-		name="driving"
-		legend="Driving"
+		name="experience"
+		legend="Care experience"
 		type="radio"
-		error="Please tell us your driving status."
+		error="Please tell us whether you are new to care or have care experience."
 		options={[
-			{ value: 'licence-car', label: 'Full UK licence and access to a car' },
-			{ value: 'licence-no-car', label: 'Full UK licence, no car' },
-			{ value: 'no-licence', label: 'No driving licence' },
+			{ value: 'new', label: 'I am new to care' },
+			{ value: 'experienced', label: 'I have care experience' },
 		]}
 	/>
 	<FormField
 		form={f}
+		name="experience_details"
+		label="Your experience and relevant training"
+		type="textarea"
+		rows={4}
+		maxlength={1000}
+		hint="Briefly describe any care roles, settings or training, such as the Care Certificate."
+		error="Please keep this to 1,000 characters or fewer."
+	/>
+
+	<ChoiceGroup
+		form={f}
+		name="hours"
+		legend="Full-time or part-time"
+		type="radio"
+		error="Please choose full-time, part-time or either."
+		options={[
+			{ value: 'full-time', label: 'Full-time' },
+			{ value: 'part-time', label: 'Part-time' },
+			{ value: 'either', label: 'Either' },
+		]}
+	/>
+	<ChoiceGroup
+		form={f}
+		name="shifts"
+		legend="Preferred shifts"
+		type="checkbox"
+		hint="Tick all that apply."
+		error="Please choose at least one shift option."
+		options={[
+			{ value: 'days', label: 'Day shifts' },
+			{ value: 'nights', label: 'Night shifts' },
+			{ value: 'weekends', label: 'Weekends' },
+			{ value: 'flexible', label: 'Flexible' },
+		]}
+	/>
+	<FormField form={f} name="start" label="Earliest start date" type="date" hint="Leave blank if you can start straight away." error="Please enter a date from today onwards, or leave it blank." />
+
+	<FormField
+		form={f}
 		name="cv"
-		label="CV"
+		label="Upload your CV"
 		type="file"
 		accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 		maxBytes={5 * 1024 * 1024}
-		hint="PDF or Word (.docx), up to 5 MB. Please leave out your date of birth, health information and any ID or right-to-work documents."
+		hint="PDF or Word (.docx), up to 5 MB. You can register without one. Please leave out your date of birth, health information and any ID or right-to-work documents."
 		error="Please upload your CV as a PDF or Word (.docx) document under 5 MB."
 	/>
-	<FormField form={f} name="message" label="Anything else you would like us to know" type="textarea" rows={5} maxlength={2000} error="Please keep your message to 2,000 characters or fewer." />
 	<FormField
 		form={f}
 		name="consent"

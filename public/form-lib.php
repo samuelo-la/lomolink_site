@@ -35,7 +35,7 @@ const FORM_PHONE_ERROR = 'Please enter a valid phone number, or leave it blank.'
 
 const FORM_MESSAGES = [
 	'sent' => 'Thank you. Your message has been sent and we will reply by email.',
-	'sent_candidate' => 'Thank you for registering your interest. We will be in touch by email if there is a suitable opportunity.',
+	'sent_candidate' => 'Thank you for registering your interest with Lomolink Consulting. We’ve received your details. If we identify a suitable opportunity, we’ll contact you to discuss the role and next steps.',
 	'sent_employer' => 'Thank you. We have received your staffing enquiry and will reply by email.',
 	'invalid' => 'Please check the highlighted fields and try again.',
 	'too_large' => 'Your submission was too large. Please upload a CV under 5 MB.',

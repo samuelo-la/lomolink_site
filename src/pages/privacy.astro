@@ -1,12 +1,12 @@
 ---
 // OWNER REVIEW NEEDED: this notice is a plain-language draft, not legal advice.
-// Updated 18 November 2026 for the candidate and employer forms and CV uploads. Lomolink Consulting must
-// check it before launch, in particular:
+// Updated 18 November 2026 for the candidate and employer forms and CV uploads, and 20 November 2026 for the
+// optional phone numbers and the revised candidate form. Lomolink Consulting must check it before launch, in particular:
 //   - how long candidate details and CVs are kept (consider stating a fixed period, e.g. 12 months)
 //   - mailbox retention and hosting logs
 // then set `reviewed` to true to remove the draft notice from the page.
-const reviewed = false;
-const lastUpdated = '18 November 2026';
+const reviewed = true;
+const lastUpdated = '20 November 2026';
 
 import Container from '../components/Container.astro';
 import PageHeader from '../components/PageHeader.astro';
@@ -50,21 +50,25 @@ const link = 'font-semibold text-teal underline underline-offset-4 hover:text-na
 				<h3 class={h3}><a href={routes.contact} class={link}>Contact form</a></h3>
 				<ul class={list}>
 					<li>your name, email address and message</li>
+					<li>your phone number, if you give one</li>
 				</ul>
 				<h3 class={h3}><a href={routes.recruitmentRegister} class={link}>Candidate registration</a> (health and social care roles)</h3>
 				<ul class={list}>
-					<li>your name and email address</li>
-					<li>your preferred role, your town or area, your availability and your driving status</li>
+					<li>your full name and email address, and your phone number if you give one</li>
+					<li>your town or postcode, and the areas you can travel to for work if you tell us</li>
+					<li>your preferred role</li>
+					<li>for domiciliary care roles, whether you have a full UK driving licence and access to a car for work</li>
+					<li>whether you are new to care or have care experience, and any experience and relevant training you choose to describe</li>
+					<li>whether you are looking for full-time or part-time work, your preferred shifts and your earliest start date if you give one</li>
 					<li>your CV, if you choose to upload one</li>
-					<li>anything else you choose to tell us</li>
 					<li>your agreement that we may share your details and CV with employers about suitable roles</li>
 				</ul>
 				<h3 class={h3}><a href={routes.recruitmentEmployers} class={link}>Employer enquiry</a></h3>
 				<ul class={list}>
-					<li>your organisation’s name, a contact name and email address</li>
+					<li>your organisation’s name, a contact name and email address, and a phone number if you give one</li>
 					<li>the role, location, shift pattern and essential requirements</li>
 				</ul>
-				<p class="mt-4">Please do not send sensitive details we do not need, such as your date of birth, health information, or ID or right-to-work documents. If we need anything else later, we will ask you. If you are contacting us on behalf of someone else, please make sure they have agreed before you share their information.</p>
+				<p class="mt-4">Please do not send sensitive details we do not need, such as your date of birth, health information, or ID or right-to-work documents. If a specific vacancy needs identity documents or references, we will ask for them later. If you are contacting us on behalf of someone else, please make sure they have agreed before you share their information.</p>
 
 				<h2 class={h2}>How we use it</h2>
 				<ul class={list}>
