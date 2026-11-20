@@ -51,6 +51,7 @@ export const iconPaths = {
 	hierarchy: [circle(12, 5, 2.5), circle(5, 19, 2.5), circle(12, 19, 2.5), circle(19, 19, 2.5), 'M12 7.5v9', 'M5 16.5V13h14v3.5'],
 	house: ['M3 11 12 3.5l9 7.5', 'M5 9.5V20h14V9.5', 'M10 20v-5.5h4V20'],
 	'map-pin': ['M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z', circle(12, 9.5, 2.5)],
+	'chevron-down': ['m6 9 6 6 6-6'],
 	menu: ['M4 6h16', 'M4 12h16', 'M4 18h16'],
 	close: ['M6 6l12 12', 'M18 6 6 18'],
 } satisfies Record<string, string[]>;

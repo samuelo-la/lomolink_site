@@ -1,0 +1,63 @@
+---
+// Copy from the owner's "Student Recruitment" brief (20 November 2026).
+import Button from '../components/Button.astro';
+import ContactSection from '../components/ContactSection.astro';
+import Container from '../components/Container.astro';
+import Hero from '../components/Hero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Icon from '../components/icons/Icon.astro';
+import type { IconName } from '../components/icons/paths';
+import { enquiryHref } from '../data/routes';
+import { site } from '../data/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import heroImage from '../assets/images/Student Recruitment.jpeg';
+
+const studyOptions = { label: 'Discuss your study options', href: enquiryHref('study') };
+
+const help: { icon: IconName; text: string }[] = [
+	{ icon: 'graduation-cap', text: 'Explore suitable courses, universities and colleges' },
+	{ icon: 'calendar-check', text: 'Understand entry requirements and application deadlines' },
+	{ icon: 'pen-document', text: 'Prepare your application, personal statement and supporting documents' },
+	{ icon: 'certificate', text: 'Understand your offer and prepare for enrolment' },
+];
+---
+
+<BaseLayout
+	title={`Student Recruitment | ${site.name}`}
+	description="Expert support for UK and international students who want to study in the UK: choosing a course and university, entry requirements, applications, offers and enrolment."
+>
+	<Hero
+		eyebrow="Student recruitment"
+		titleLines={['Student Recruitment']}
+		text="Expert support for UK and international students who want to study in the UK"
+		primary={studyOptions}
+		image={heroImage}
+		imageAlt="An education adviser talks through a university prospectus with two prospective students at a library table overlooking a campus."
+		imagePosition="object-[60%_50%]"
+	/>
+
+	<section class="py-12 lg:py-20" aria-labelledby="help-heading">
+		<Container>
+			<p class="mx-auto max-w-3xl text-center text-lg leading-relaxed text-dark-grey">
+				{site.name} is a professional education consultancy offering a full student recruitment and education agency service. We act as an education agent for most UK universities. Whether you’re applying from within the UK or from overseas, we’ll help you choose a course that suits your qualifications, interests and career goals, and guide you through each stage of the application process.
+			</p>
+
+			<SectionHeading id="help-heading" class="mt-12 lg:mt-16">We can help you</SectionHeading>
+			<ul class="mx-auto mt-10 grid max-w-4xl gap-4 md:grid-cols-2 md:gap-6">
+				{help.map((item, i) => (
+					<li class="flex items-center gap-5 rounded-xl border border-navy/10 bg-white p-5 shadow-card sm:p-6" data-reveal data-reveal-delay={String(i % 2)}>
+						<Icon name={item.icon} class="size-10 shrink-0 text-teal" />
+						<span class="w-px shrink-0 self-stretch bg-teal/40" aria-hidden="true"></span>
+						<p class="text-lg leading-relaxed text-dark-grey">{item.text}</p>
+					</li>
+				))}
+			</ul>
+
+			<div class="mt-10 text-center">
+				<Button href={studyOptions.href} variant="teal">{studyOptions.label}</Button>
+			</div>
+		</Container>
+	</section>
+
+	<ContactSection title="Let’s discuss your next step" />
+</BaseLayout>

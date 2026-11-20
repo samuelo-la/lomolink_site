@@ -16,8 +16,29 @@ window.addEventListener('scroll', updateScrollState, { passive: true });
 updateScrollState();
 
 menu?.querySelectorAll('[data-menu-link]').forEach((link) => link.addEventListener('click', closeMenu));
+// Desktop menu groups (e.g. Recruitment): close on outside click, Escape or choosing a link.
+const dropdowns = [...document.querySelectorAll('[data-nav-dropdown]')];
+const closeDropdowns = (except, returnFocus = false) => {
+	dropdowns.forEach((dropdown) => {
+		if (dropdown === except || !dropdown.open) return;
+		dropdown.open = false;
+		if (returnFocus) dropdown.querySelector('summary')?.focus();
+	});
+};
+dropdowns.forEach((dropdown) => {
+	dropdown.addEventListener('toggle', () => {
+		if (dropdown.open) closeDropdowns(dropdown);
+	});
+	dropdown.querySelectorAll('[data-dropdown-link]').forEach((link) => link.addEventListener('click', () => closeDropdowns()));
+});
+document.addEventListener('click', (event) => {
+	if (!dropdowns.some((dropdown) => dropdown.contains(event.target))) closeDropdowns();
+});
+
 document.addEventListener('keydown', (event) => {
-	if (event.key === 'Escape') closeMenu();
+	if (event.key !== 'Escape') return;
+	closeMenu();
+	closeDropdowns(undefined, true);
 });
 
 // Forms: inline validation and fetch submission. Without JavaScript they post normally and the server checks everything.

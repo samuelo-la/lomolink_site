@@ -1,5 +1,5 @@
 ---
-import { mainNav, routes } from '../data/routes';
+import { navLinks, routes } from '../data/routes';
 import { site } from '../data/site';
 import Container from './Container.astro';
 import Icon from './icons/Icon.astro';
@@ -18,7 +18,7 @@ const linkClasses = 'transition-colors hover:text-gold';
 		<nav aria-labelledby="footer-links">
 			<h2 id="footer-links" class="text-sm font-semibold tracking-wider text-gold uppercase">Quick links</h2>
 			<ul class="mt-4 space-y-2 text-sm text-white/90">
-				{mainNav.map((link) => <li><a href={link.href} class={linkClasses}>{link.label}</a></li>)}
+				{navLinks.map((link) => <li><a href={link.href} class={linkClasses}>{link.label}</a></li>)}
 				<li><a href={routes.contact} class={linkClasses}>Contact Us</a></li>
 			</ul>
 		</nav>

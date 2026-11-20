@@ -8,6 +8,7 @@ export const routes = {
 	/** Each course area has a details section on the Education & Training page. */
 	courseArea: (slug: string) => `/education-training/#${slug}`,
 	refugeeSupport: '/refugee-education-support/',
+	studentRecruitment: '/student-recruitment/',
 	recruitment: '/recruitment/',
 	recruitmentRegister: '/recruitment/register/',
 	recruitmentEmployers: '/recruitment/employers/',
@@ -16,13 +17,34 @@ export const routes = {
 	privacy: '/privacy/',
 } as const;
 
-export const mainNav = [
+export interface NavLink {
+	href: string;
+	label: string;
+}
+export interface NavGroup {
+	label: string;
+	children: NavLink[];
+}
+export type NavItem = NavLink | NavGroup;
+
+export const isNavGroup = (item: NavItem): item is NavGroup => 'children' in item;
+
+export const mainNav: NavItem[] = [
 	{ href: routes.home, label: 'Home' },
 	{ href: routes.about, label: 'About Us' },
 	{ href: routes.educationTraining, label: 'Education & Training' },
 	{ href: routes.refugeeSupport, label: 'Refugee Education Support' },
-	{ href: routes.recruitment, label: 'Recruitment' },
-] as const;
+	{
+		label: 'Recruitment',
+		children: [
+			{ href: routes.studentRecruitment, label: 'Student Recruitment' },
+			{ href: routes.recruitment, label: 'Care Recruitment' },
+		],
+	},
+];
+
+/** Every menu link in order, with groups flattened (mobile menu, footer). */
+export const navLinks: NavLink[] = mainNav.flatMap((item) => (isNavGroup(item) ? item.children : [item]));
 
 const generalTopics = {
 	consultation: 'I would like to request a consultation. ',
