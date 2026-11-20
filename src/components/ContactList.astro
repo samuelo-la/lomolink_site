@@ -21,4 +21,10 @@ const itemClasses = layout === 'row' ? 'flex items-center gap-3 whitespace-nowra
 	<li class={itemClasses}><Icon name="mail" class="size-6 shrink-0 text-teal" /><a href={`mailto:${site.email}`} class:list={[linkClasses, 'break-all']}><span class="sr-only">Email: </span>{site.email}</a></li>
 	<li class={itemClasses}><Icon name="phone" class="size-6 shrink-0 text-teal" /><a href={site.phoneHref} class={linkClasses}><span class="sr-only">Telephone: </span>{site.phone}</a></li>
 	<li class={itemClasses}><Icon name="globe" class="size-6 shrink-0 text-teal" /><a href={site.url} class={linkClasses}><span class="sr-only">Website: </span>{site.website}</a></li>
+	{layout === 'stack' && (
+		<li class="flex items-start gap-3">
+			<Icon name="map-pin" class="size-6 shrink-0 text-teal" />
+			<address class="font-medium text-navy not-italic"><span class="sr-only">Address: </span>{site.address.map((line) => <span class="block">{line}</span>)}</address>
+		</li>
+	)}
 </ul>

@@ -24,13 +24,6 @@ document.addEventListener('keydown', (event) => {
 document.querySelectorAll('[data-enquiry-form]').forEach(upgradeForm);
 
 function upgradeForm(form) {
-	const topicSentences = {
-		consultation: 'I would like to book a consultation. ',
-		partnership: 'I would like to discuss a partnership. ',
-		referral: 'I would like to discuss a referral. ',
-		candidate: 'I am interested in health and social care roles. ',
-		employer: 'I would like to discuss our staffing needs. ',
-	};
 	const genericError = 'Sorry, your details could not be sent. Please try again, or contact us by email or telephone.';
 	const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 	const status = form.querySelector('[data-form-status]');
@@ -38,10 +31,17 @@ function upgradeForm(form) {
 	const fields = [...form.querySelectorAll('[data-field]')];
 	const fieldByName = (name) => fields.find((field) => field.dataset.field === name);
 
-	if (form.hasAttribute('data-topic-prefill')) {
+	// ?topic= prefills the message, but only with a sentence from the fixed list the page provides.
+	if (form.dataset.topics) {
+		let topicSentences = {};
+		try {
+			topicSentences = JSON.parse(form.dataset.topics);
+		} catch {}
 		const topic = new URLSearchParams(window.location.search).get('topic');
 		const message = fieldByName('message');
-		if (topic && Object.hasOwn(topicSentences, topic) && message && !message.value) message.value = topicSentences[topic];
+		if (topic && Object.hasOwn(topicSentences, topic) && typeof topicSentences[topic] === 'string' && message && !message.value) {
+			message.value = topicSentences[topic];
+		}
 	}
 
 	// Keep each field's hint in aria-describedby; the error id is added only while an error shows.
@@ -62,6 +62,10 @@ function upgradeForm(form) {
 		if (field.maxLength > 0 && value.length > field.maxLength) return false;
 		if (field.minLength > 0 && value.length < field.minLength) return false;
 		if (field.type === 'email' && !emailPattern.test(value)) return false;
+		if (field.type === 'tel') {
+			const digits = value.replace(/\D/g, '').length;
+			if (!/^\+?[0-9 ().-]+$/.test(value) || digits < 7 || digits > 15) return false;
+		}
 		return true;
 	};
 

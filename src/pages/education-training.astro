@@ -26,7 +26,8 @@ const steps = ['Tell us your goals', 'Review suitable courses', 'Check entry req
 		eyebrow="Education and training"
 		titleLines={['Find a course that', 'moves you forward.']}
 		text="Explore qualifications and practical learning opportunities to support your education and career goals."
-		primary={{ label: 'Discuss your study options', href: enquiryHref('consultation') }}
+		primary={{ label: 'Discuss your study options', href: enquiryHref('study') }}
+		secondary={{ label: 'Browse course areas', href: '#course-areas' }}
 		image={heroImage}
 		imageAlt="An adviser talks through a course prospectus with two learners at a table in a college library."
 		imagePosition="object-[60%_50%]"
@@ -65,7 +66,7 @@ const steps = ['Tell us your goals', 'Review suitable courses', 'Check entry req
 	<SplitFeature
 		id="returning-heading"
 		title="Returning to education?"
-		action={{ label: 'Get personalised guidance', href: enquiryHref('consultation') }}
+		action={{ label: 'Get personalised guidance', href: enquiryHref('guidance') }}
 		image={practicalImage}
 		imageAlt="A tutor in a healthcare uniform shows a group of adult learners how to take a blood pressure reading."
 	>
@@ -85,7 +86,7 @@ const steps = ['Tell us your goals', 'Review suitable courses', 'Check entry req
 		id="unsure-heading"
 		title="Not sure which course is right for you?"
 		text="Let us help you explore your options."
-		action={{ label: 'Book a consultation', href: enquiryHref('consultation') }}
+		action={{ label: 'Request a consultation', href: enquiryHref('consultation') }}
 	/>
 
 	<ContactSection title="Let’s discuss your next step" note="Admission and progression depend on the requirements of the relevant provider or institution." />

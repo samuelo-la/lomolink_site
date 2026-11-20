@@ -32,6 +32,7 @@ $form = form_begin('/recruitment/register/');
 
 $name = form_text('name', 1, 100);
 $email = form_email();
+$phone = form_phone();
 $role = form_choice('role', CANDIDATE_ROLES);
 $location = form_text('location', 1, 100);
 $availability = form_choices('availability', CANDIDATE_AVAILABILITY, 1);
@@ -46,6 +47,9 @@ if ($name === null) {
 }
 if ($email === null) {
 	$errors['email'] = 'Please enter a valid email address (up to 150 characters).';
+}
+if ($phone === null) {
+	$errors['phone'] = FORM_PHONE_ERROR;
 }
 if ($role === null) {
 	$errors['role'] = 'Please choose your preferred role.';
@@ -78,6 +82,7 @@ $availabilityText = implode(', ', array_map(static fn (string $key): string => C
 $body = "A new candidate registration was sent from the website.\n\n"
 	. "Name: {$name}\n"
 	. "Email: {$email}\n"
+	. 'Phone: ' . ($phone === '' ? 'not given' : $phone) . "\n"
 	. 'Preferred role: ' . CANDIDATE_ROLES[$role] . "\n"
 	. "Town or area: {$location}\n"
 	. "Availability: {$availabilityText}\n"

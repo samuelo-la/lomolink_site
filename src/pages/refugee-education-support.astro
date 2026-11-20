@@ -31,7 +31,7 @@ const services: { icon: IconName; title: string; text: string }[] = [
 		eyebrow="Refugee education support"
 		titleLines={['Find your next step', 'in education.']}
 		text={`If you’ve been granted refugee status in the UK, ${site.name} can help you explore university, college and training options. Whether you want to return to education, build on qualifications gained overseas or prepare for a new career, we’ll help you work out what to do next.`}
-		primary={{ label: 'Discuss your study options', href: enquiryHref('consultation') }}
+		primary={{ label: 'Discuss your study options', href: enquiryHref('study') }}
 		secondary={{ label: 'Refer someone for support', href: enquiryHref('referral') }}
 		image={heroImage}
 		imageAlt="An adviser goes through a document with two women at a table in a bright library."
@@ -57,7 +57,7 @@ const services: { icon: IconName; title: string; text: string }[] = [
 		<p>Our guidance starts with what you want to achieve and the practical support you need to move forward.</p>
 	</IntroSplit>
 
-	<IntroSplit id="contact-steps-heading" title="What happens when you get in touch" action={{ label: 'Discuss your study options', href: enquiryHref('consultation') }}>
+	<IntroSplit id="contact-steps-heading" title="What happens when you get in touch" action={{ label: 'Discuss your study options', href: enquiryHref('study') }}>
 		<p>We start with a conversation about what you’ve studied or done before and what you’d like to do next. Together, we identify suitable options and agree on practical steps, such as gathering documents, contacting a university or preparing an application.</p>
 	</IntroSplit>
 
@@ -72,7 +72,7 @@ const services: { icon: IconName; title: string; text: string }[] = [
 	<ContactSection
 		title="Take your next step"
 		intro="You do not need to have everything worked out before getting in touch. Start with a conversation about your goals, and we can explore the options together."
-		action={{ label: 'Enquire about education support', href: enquiryHref('consultation') }}
+		action={{ label: 'Enquire about education support', href: enquiryHref('refugee-education') }}
 		note="Admission, qualification recognition and funding decisions are made by the relevant institutions and organisations."
 	/>
 </BaseLayout>

@@ -42,6 +42,7 @@ const link = 'font-semibold text-teal underline underline-offset-4 hover:text-na
 					<li>Contact: {site.contactPerson}</li>
 					<li>Email: <a href={`mailto:${site.email}`} class={link}>{site.email}</a></li>
 					<li>Telephone: <a href={site.phoneHref} class={link}>{site.phone}</a></li>
+					<li>Address: {site.address.join(', ')}</li>
 				</ul>
 
 				<h2 class={h2}>What we collect</h2>

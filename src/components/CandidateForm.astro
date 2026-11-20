@@ -16,6 +16,7 @@ const f = 'candidate';
 >
 	<FormField form={f} name="name" label="Name" required maxlength={100} autocomplete="name" error="Please enter your name (up to 100 characters)." />
 	<FormField form={f} name="email" label="Email address" type="email" required maxlength={150} autocomplete="email" error="Please enter a valid email address, for example name@example.com." />
+	<FormField form={f} name="phone" label="Phone number" type="tel" maxlength={30} autocomplete="tel" hint="If you would like us to call you." error="Please enter a valid phone number, or leave it blank." />
 	<FormField
 		form={f}
 		name="role"

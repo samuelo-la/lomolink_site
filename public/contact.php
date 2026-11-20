@@ -13,6 +13,7 @@ $form = form_begin('/contact/');
 
 $name = form_text('name', 1, 100);
 $email = form_email();
+$phone = form_phone();
 $message = form_text('message', 10, 2000, true);
 
 $errors = [];
@@ -21,6 +22,9 @@ if ($name === null) {
 }
 if ($email === null) {
 	$errors['email'] = 'Please enter a valid email address (up to 150 characters).';
+}
+if ($phone === null) {
+	$errors['phone'] = FORM_PHONE_ERROR;
 }
 if ($message === null) {
 	$errors['message'] = 'Please write a message between 10 and 2,000 characters.';
@@ -33,7 +37,8 @@ form_rate_limit($form);
 
 $body = "A new enquiry was sent from the contact form.\n\n"
 	. "Name: {$name}\n"
-	. "Email: {$email}\n\n"
+	. "Email: {$email}\n"
+	. 'Phone: ' . ($phone === '' ? 'not given' : $phone) . "\n\n"
 	. "Message:\n{$message}\n";
 
 form_send($form, 'New enquiry from the Lomolink Consulting website', $body, $email);

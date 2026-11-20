@@ -1,6 +1,6 @@
 ---
 // Shared wrapper for the site's forms. Works without JavaScript; main.js upgrades any [data-enquiry-form].
-import { routes } from '../../data/routes';
+import { routes, topicSentences } from '../../data/routes';
 import Button from '../Button.astro';
 
 interface Props {
@@ -26,7 +26,7 @@ const { action, form, submitLabel, privacyNote, topicPrefill = false, multipart 
 	enctype={multipart ? 'multipart/form-data' : undefined}
 	class="relative space-y-6"
 	data-enquiry-form
-	data-topic-prefill={topicPrefill ? '' : undefined}
+	data-topics={topicPrefill ? JSON.stringify(topicSentences) : undefined}
 >
 	<!-- Shown without JavaScript when the handler redirects back with ?error=1#form-error -->
 	<div id="form-error" class="hidden rounded-xl border border-red-700/30 bg-red-50 p-4 text-red-800 target:block" role="alert">

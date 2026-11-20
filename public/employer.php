@@ -14,6 +14,7 @@ $form = form_begin('/recruitment/employers/');
 $organisation = form_text('organisation', 1, 150);
 $name = form_text('name', 1, 100);
 $email = form_email();
+$phone = form_phone();
 $role = form_text('role', 1, 150);
 $location = form_text('location', 1, 100);
 $shifts = form_text('shifts', 1, 200);
@@ -28,6 +29,9 @@ if ($name === null) {
 }
 if ($email === null) {
 	$errors['email'] = 'Please enter a valid email address (up to 150 characters).';
+}
+if ($phone === null) {
+	$errors['phone'] = FORM_PHONE_ERROR;
 }
 if ($role === null) {
 	$errors['role'] = 'Please tell us the role you need to fill (up to 150 characters).';
@@ -51,6 +55,7 @@ $body = "A new staffing enquiry was sent from the website.\n\n"
 	. "Organisation: {$organisation}\n"
 	. "Contact name: {$name}\n"
 	. "Email: {$email}\n"
+	. 'Phone: ' . ($phone === '' ? 'not given' : $phone) . "\n"
 	. "Role: {$role}\n"
 	. "Location: {$location}\n"
 	. "Shift pattern: {$shifts}\n\n"

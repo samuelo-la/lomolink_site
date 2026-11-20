@@ -7,6 +7,7 @@ import FormShell from './forms/FormShell.astro';
 <FormShell action="/contact.php" form="contact" submitLabel="Send message" privacyNote="We use your details only to reply to your enquiry." topicPrefill>
 	<FormField form="contact" name="name" label="Name" required maxlength={100} autocomplete="name" error="Please enter your name (up to 100 characters)." />
 	<FormField form="contact" name="email" label="Email address" type="email" required maxlength={150} autocomplete="email" error="Please enter a valid email address, for example name@example.com." />
+	<FormField form="contact" name="phone" label="Phone number" type="tel" maxlength={30} autocomplete="tel" hint="If you would like us to call you." error="Please enter a valid phone number, or leave it blank." />
 	<FormField
 		form="contact"
 		name="message"

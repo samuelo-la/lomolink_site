@@ -1,6 +1,6 @@
 ---
 import type { Course } from '../data/courses';
-import { enquiryHref } from '../data/routes';
+import { courseEnquiryHref } from '../data/routes';
 import Button from './Button.astro';
 import Icon from './icons/Icon.astro';
 
@@ -29,7 +29,7 @@ const titleId = `${course.slug}-title`;
 
 
 	<div class="mt-auto flex flex-wrap items-center gap-x-6 gap-y-4 pt-6">
-		<Button href={enquiryHref('consultation')} variant="teal" size="sm">Enquire about this area<span class="sr-only">: {course.title}</span></Button>
+		<Button href={courseEnquiryHref(course.slug)} variant="teal" size="sm">Enquire about this area<span class="sr-only">: {course.title}</span></Button>
 		<a href={backHref} class="text-sm font-semibold text-teal underline-offset-4 hover:text-navy hover:underline">Back to course areas</a>
 	</div>
 </article>

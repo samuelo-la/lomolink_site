@@ -31,6 +31,8 @@ const FORM_CLOUDFLARE_RANGES = [
 	'2a06:98c0::/29', '2c0f:f248::/32',
 ];
 
+const FORM_PHONE_ERROR = 'Please enter a valid phone number, or leave it blank.';
+
 const FORM_MESSAGES = [
 	'sent' => 'Thank you. Your message has been sent and we will reply by email.',
 	'sent_candidate' => 'Thank you for registering your interest. We will be in touch by email if there is a suitable opportunity.',
@@ -168,6 +170,23 @@ function form_email(string $name = 'email'): ?string
 {
 	$value = form_text($name, 1, 150);
 	return $value !== null && filter_var($value, FILTER_VALIDATE_EMAIL) !== false ? $value : null;
+}
+
+/**
+ * Optional phone number: '' when left empty, the number when valid, null when invalid.
+ * Allows digits, spaces, +, brackets, dots and hyphens, with 7 to 15 digits in total.
+ */
+function form_phone(string $name = 'phone'): ?string
+{
+	$value = form_text($name, 0, 30);
+	if ($value === null || $value === '') {
+		return $value;
+	}
+	if (preg_match('/^\+?[0-9 ().-]+$/', $value) !== 1) {
+		return null;
+	}
+	$digits = strlen((string) preg_replace('/\D/', '', $value));
+	return $digits >= 7 && $digits <= 15 ? $value : null;
 }
 
 /**
